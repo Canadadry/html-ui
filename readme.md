@@ -35,4 +35,4 @@ We want to be able to write something like this :
 
 and got this
 
-![example 1](screen/1.png)
+![example 1](doc/screen/1.png)
