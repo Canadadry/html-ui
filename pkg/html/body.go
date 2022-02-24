@@ -57,6 +57,11 @@ func Div(attr Attributes, children ...Tag) Tag {
 	return basic("div", attr, children...)
 }
 
+func Inline(t Tag) Tag {
+	t.InlineChildren = true
+	return t
+}
+
 func H1(attr Attributes, children ...Tag) Tag {
 	return basic("h1", attr, children...)
 }

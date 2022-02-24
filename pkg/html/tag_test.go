@@ -56,6 +56,33 @@ func TestRender(t *testing.T) {
 		},
 		{
 			t: Tag{
+				Name:            "a",
+				AttributesNames: []attribute{attribute("href"), attribute("target")},
+				Attributes: map[attribute]string{
+					attribute("href"):   "/public/content.html",
+					attribute("target"): "_blank",
+					attribute("fake"):   "attribute",
+				},
+				Children: []Tag{{
+					Name:            "a",
+					AttributesNames: []attribute{attribute("href"), attribute("target")},
+					Attributes: map[attribute]string{
+						attribute("href"):   "/public/content.html",
+						attribute("target"): "_blank",
+						attribute("fake"):   "attribute",
+					},
+					InlineChildren: true,
+					Children:       []Tag{{Raw: "Test\nChild"}},
+				}},
+			},
+			v: `<a href="/public/content.html" target="_blank">
+	<a href="/public/content.html" target="_blank">Test
+Child</a>
+</a>
+`,
+		},
+		{
+			t: Tag{
 				Name: "input",
 				AttributesNames: []attribute{
 					attribute("type"),
