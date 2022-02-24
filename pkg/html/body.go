@@ -1,6 +1,6 @@
 package html
 
-func basic(name string, attr Attributes, children ...Node) Tag {
+func basic(name string, attr Attributes, children ...Tag) Tag {
 	return Tag{
 		Name:            name,
 		AttributesNames: []attribute{AttributeId, AttributeClass, AttributeStyle, AttributeDataTest},
@@ -9,87 +9,87 @@ func basic(name string, attr Attributes, children ...Node) Tag {
 	}
 }
 
-func Table(attr Attributes, children ...Node) Tag {
+func Table(attr Attributes, children ...Tag) Tag {
 	return basic("table", attr, children...)
 }
 
-func Thead(attr Attributes, children ...Node) Tag {
+func Thead(attr Attributes, children ...Tag) Tag {
 	return basic("thead", attr, children...)
 }
 
-func Tbody(attr Attributes, children ...Node) Tag {
+func Tbody(attr Attributes, children ...Tag) Tag {
 	return basic("tbody", attr, children...)
 }
 
-func Tr(attr Attributes, children ...Node) Tag {
+func Tr(attr Attributes, children ...Tag) Tag {
 	return basic("tr", attr, children...)
 }
 
-func Td(attr Attributes, children ...Node) Tag {
+func Td(attr Attributes, children ...Tag) Tag {
 	return basic("td", attr, children...)
 }
 
-func Th(attr Attributes, children ...Node) Tag {
+func Th(attr Attributes, children ...Tag) Tag {
 	return basic("th", attr, children...)
 }
 
-func P(attr Attributes, children ...Node) Tag {
+func P(attr Attributes, children ...Tag) Tag {
 	return basic("p", attr, children...)
 }
 
-func Strong(attr Attributes, children ...Node) Tag {
+func Strong(attr Attributes, children ...Tag) Tag {
 	return basic("strong", attr, children...)
 }
 
-func B(attr Attributes, children ...Node) Tag {
+func B(attr Attributes, children ...Tag) Tag {
 	return basic("b", attr, children...)
 }
 
-func Nav(attr Attributes, children ...Node) Tag {
+func Nav(attr Attributes, children ...Tag) Tag {
 	return basic("nav", attr, children...)
 }
 
-func Footer(attr Attributes, children ...Node) Tag {
+func Footer(attr Attributes, children ...Tag) Tag {
 	return basic("footer", attr, children...)
 }
 
-func Div(attr Attributes, children ...Node) Tag {
+func Div(attr Attributes, children ...Tag) Tag {
 	return basic("div", attr, children...)
 }
 
-func H1(attr Attributes, children ...Node) Tag {
+func H1(attr Attributes, children ...Tag) Tag {
 	return basic("h1", attr, children...)
 }
 
-func H2(attr Attributes, children ...Node) Tag {
+func H2(attr Attributes, children ...Tag) Tag {
 	return basic("h2", attr, children...)
 }
 
-func H3(attr Attributes, children ...Node) Tag {
+func H3(attr Attributes, children ...Tag) Tag {
 	return basic("h3", attr, children...)
 }
 
-func H4(attr Attributes, children ...Node) Tag {
+func H4(attr Attributes, children ...Tag) Tag {
 	return basic("h4", attr, children...)
 }
 
-func H5(attr Attributes, children ...Node) Tag {
+func H5(attr Attributes, children ...Tag) Tag {
 	return basic("h5", attr, children...)
 }
 
-func Span(attr Attributes, children ...Node) Tag {
+func Span(attr Attributes, children ...Tag) Tag {
 	return basic("span", attr, children...)
 }
 
-func I(attr Attributes, children ...Node) Tag {
+func I(attr Attributes, children ...Tag) Tag {
 	return basic("i", attr, children...)
 }
 
-func Small(attr Attributes, children ...Node) Tag {
+func Small(attr Attributes, children ...Tag) Tag {
 	return basic("small", attr, children...)
 }
 
-func Ul(attr Attributes, children ...Node) Tag {
+func Ul(attr Attributes, children ...Tag) Tag {
 	return Tag{
 		Name:            "ul",
 		AttributesNames: []attribute{AttributeId, AttributeClass, AttributeStyle, AttributeDataTest},
@@ -98,7 +98,7 @@ func Ul(attr Attributes, children ...Node) Tag {
 	}
 }
 
-func Ol(attr Attributes, children ...Node) Tag {
+func Ol(attr Attributes, children ...Tag) Tag {
 	return Tag{
 		Name:            "ol",
 		AttributesNames: []attribute{AttributeId, AttributeClass, AttributeStyle, AttributeDataTest},
@@ -107,7 +107,7 @@ func Ol(attr Attributes, children ...Node) Tag {
 	}
 }
 
-func Li(attr Attributes, children ...Node) Tag {
+func Li(attr Attributes, children ...Tag) Tag {
 	return Tag{
 		Name:            "li",
 		AttributesNames: []attribute{AttributeId, AttributeClass, AttributeStyle, AttributeDataTest},
@@ -116,7 +116,7 @@ func Li(attr Attributes, children ...Node) Tag {
 	}
 }
 
-func Form(attr Attributes, children ...Node) Tag {
+func Form(attr Attributes, children ...Tag) Tag {
 	return Tag{
 		Name:            "form",
 		AttributesNames: []attribute{AttributeId, AttributeAction, AttributeMethod, AttributeClass, AttributeStyle, AttributeDataTest},
@@ -134,7 +134,7 @@ func Input(attr Attributes) Tag {
 	}
 }
 
-func Label(attr Attributes, children ...Node) Tag {
+func Label(attr Attributes, children ...Tag) Tag {
 	return Tag{
 		Name:            "label",
 		AttributesNames: []attribute{AttributeId, AttributeClass, AttributeStyle, AttributeDataTest, AttributeFor},
@@ -143,7 +143,7 @@ func Label(attr Attributes, children ...Node) Tag {
 	}
 }
 
-func A(attr Attributes, children ...Node) Tag {
+func A(attr Attributes, children ...Tag) Tag {
 	return Tag{
 		Name:            "a",
 		AttributesNames: []attribute{AttributeId, AttributeHref, AttributeClass, AttributeStyle, AttributeDataTest},
@@ -151,7 +151,7 @@ func A(attr Attributes, children ...Node) Tag {
 		Children:        children,
 	}
 }
-func Button(attr Attributes, children ...Node) Tag {
+func Button(attr Attributes, children ...Tag) Tag {
 	return Tag{
 		Name:            "button",
 		AttributesNames: []attribute{AttributeId, AttributeType, AttributeName, AttributeValue, AttributeClass, AttributeStyle, AttributeDataTest},

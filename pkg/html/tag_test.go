@@ -19,7 +19,7 @@ func TestRender(t *testing.T) {
 					attribute("target"): "_blank",
 					attribute("fake"):   "attribute",
 				},
-				Children: []Node{Tag{Raw: "TestChild"}},
+				Children: []Tag{{Raw: "TestChild"}},
 			},
 			v: `<a href="/public/content.html" target="_blank">
 	TestChild
@@ -35,7 +35,7 @@ func TestRender(t *testing.T) {
 					attribute("target"): "_blank",
 					attribute("fake"):   "attribute",
 				},
-				Children: []Node{Tag{
+				Children: []Tag{{
 					Name:            "a",
 					AttributesNames: []attribute{attribute("href"), attribute("target")},
 					Attributes: map[attribute]string{
@@ -43,7 +43,7 @@ func TestRender(t *testing.T) {
 						attribute("target"): "_blank",
 						attribute("fake"):   "attribute",
 					},
-					Children: []Node{Tag{Raw: "Test\nChild"}},
+					Children: []Tag{{Raw: "Test\nChild"}},
 				}},
 			},
 			v: `<a href="/public/content.html" target="_blank">
@@ -67,7 +67,7 @@ func TestRender(t *testing.T) {
 					attribute("placeholder"): "your name",
 				},
 				Closed:   true,
-				Children: []Node{Tag{Raw: "TestChild"}},
+				Children: []Tag{{Raw: "TestChild"}},
 			},
 			v: `<input placeholder="your name" type="text"/>
 `,
@@ -92,7 +92,7 @@ func TestRender(t *testing.T) {
 
 	for i, tt := range tests {
 		result := bytes.Buffer{}
-		err := tt.t.Render(&result, "")
+		err := Render(&result, tt.t, "", "\t", "\n")
 		if err != nil {
 			t.Fatalf("[%d] Failed : %v", i, err)
 		}

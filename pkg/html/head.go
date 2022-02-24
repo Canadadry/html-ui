@@ -33,7 +33,7 @@ func Link(attr Attributes) Tag {
 func Title(title string) Tag {
 	return Tag{
 		Name:     "title",
-		Children: []Node{Text(title)},
+		Children: []Tag{Text(title)},
 	}
 }
 
@@ -42,7 +42,7 @@ func Script(attr Attributes, script string) Tag {
 		Name:            "script",
 		AttributesNames: []attribute{AttributeType, AttributeSrc},
 		Attributes:      attr,
-		Children:        []Node{Text(script)},
+		Children:        []Tag{Text(script)},
 	}
 }
 
@@ -51,6 +51,6 @@ func Style(style string) Tag {
 		Name:            "style",
 		AttributesNames: []attribute{},
 		Attributes:      nil,
-		Children:        []Node{Text(style)},
+		Children:        []Tag{Text(style)},
 	}
 }

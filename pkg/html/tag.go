@@ -19,14 +19,14 @@ type Tag struct {
 	Closed          bool
 	AttributesNames []attribute
 	Attributes      map[attribute]string
-	Children        []Node
+	Children        []Tag
 }
 
-func (t Tag) Render(w io.Writer, indent string) error {
+func Render(w io.Writer, t Tag, indent, indentIncr, linebreak string) error {
 	if t.Raw != "" {
-		rawPart := strings.Split(t.Raw, "\n")
+		rawPart := strings.Split(t.Raw, linebreak)
 		for i, part := range rawPart {
-			_, err := fmt.Fprintf(w, "%s%s\n", indent, part)
+			_, err := fmt.Fprintf(w, "%s%s%s", indent, part, linebreak)
 			if err != nil {
 				return fmt.Errorf("on tag raw part %d:'%s' : %w", i, part, err)
 			}
@@ -47,24 +47,21 @@ func (t Tag) Render(w io.Writer, indent string) error {
 		content += " " + string(attrName) + `="` + value + `"`
 	}
 	if t.Closed {
-		_, err := fmt.Fprintf(w, "%s<%s/>\n", indent, content)
+		_, err := fmt.Fprintf(w, "%s<%s/>%s", indent, content, linebreak)
 		return err
 	}
 
-	_, err := fmt.Fprintf(w, "%s<%s>\n", indent, content)
+	_, err := fmt.Fprintf(w, "%s<%s>%s", indent, content, linebreak)
 	if err != nil {
 		return fmt.Errorf("on tag %s before : %w", t.Name, err)
 	}
 	for i, r := range t.Children {
-		if r == nil {
-			continue
-		}
-		err = r.Render(w, indent+"\t")
+		err = Render(w, r, indent+indentIncr, indentIncr, linebreak)
 		if err != nil {
 			return fmt.Errorf("on tag %s child %d : %w", t.Name, i, err)
 		}
 	}
-	_, err = fmt.Fprintf(w, "%s</%s>\n", indent, t.Name)
+	_, err = fmt.Fprintf(w, "%s</%s>%s", indent, t.Name, linebreak)
 	if err != nil {
 		return fmt.Errorf("on tag %s after : %w", t.Name, err)
 	}

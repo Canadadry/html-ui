@@ -13,14 +13,14 @@ func TestDocumentWith(t *testing.T) {
 		{
 			r: Document{
 				Lang: "en",
-				Head: []Node{
+				Head: []Tag{
 					MetaCharset("utf-8"),
 					Meta("viewport", "width=device-width, initial-scale=1"),
 					Link(Attributes{AttributeHref: "/public/css/style.css", AttributeType: "text/css", AttributeRel: "stylesheet"}),
 					Link(Attributes{AttributeHref: "/public/img/favicon.ico", AttributeRel: "icon"}),
 					Title("example"),
 				},
-				Body: []Node{
+				Body: []Tag{
 					Div(Attributes{AttributeClass: "container-fluid"},
 						Div(Attributes{AttributeClass: "row"},
 							Div(Attributes{AttributeClass: "col pt-2"},

@@ -37,13 +37,12 @@ const (
 
 type Document struct {
 	Lang string
-	Head []Node
-	Body []Node
+	Head []Tag
+	Body []Tag
 }
 
 func (d Document) Render(w io.Writer) error {
-	doctype := Tag{Raw: "<!doctype html>"}
-	err := doctype.Render(w, "")
+	_, err := fmt.Fprintln(w, "<!doctype html>")
 	if err != nil {
 		return fmt.Errorf("on doctype : %w", err)
 	}
@@ -51,11 +50,11 @@ func (d Document) Render(w io.Writer) error {
 	if d.Lang != "" {
 		htmlAttr[AttributeLang] = d.Lang
 	}
-	return Tag{
+	t := Tag{
 		Name:            "html",
 		AttributesNames: []attribute{AttributeLang},
 		Attributes:      htmlAttr,
-		Children: []Node{
+		Children: []Tag{
 			Tag{
 				Name:     "head",
 				Children: d.Head,
@@ -65,5 +64,6 @@ func (d Document) Render(w io.Writer) error {
 				Children: d.Body,
 			},
 		},
-	}.Render(w, "")
+	}
+	return Render(w, t, "", "\t", "\n")
 }
