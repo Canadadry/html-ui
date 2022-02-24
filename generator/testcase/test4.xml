@@ -1,0 +1,37 @@
+<layout>
+	<row spacing="10">
+		<column spacing="10">
+			<text>
+				hello world!
+			</text>
+			<text>
+				hello world!
+			</text>
+			<text>
+				hello world!
+			</text>
+		</column>
+		<column spacing="10">
+			<text>
+				hello world!
+			</text>
+			<text>
+				hello world!
+			</text>
+			<text>
+				hello world!
+			</text>
+		</column>
+		<column spacing="10">
+			<text>
+				hello world!
+			</text>
+			<text>
+				hello world!
+			</text>
+			<text>
+				hello world!
+			</text>
+		</column>
+	</row>
+</layout>

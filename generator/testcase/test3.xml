@@ -1,0 +1,13 @@
+<layout>
+	<row spacing="10">
+		<text>
+			hello world!
+		</text>
+		<text>
+			hello world!
+		</text>
+		<text>
+			hello world!
+		</text>
+	</row>
+</layout>
