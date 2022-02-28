@@ -113,7 +113,7 @@ func (g *generator) generateText(txt string) html.Tag {
 func (g *generator) generateHead() []html.Tag {
 	out := []html.Tag{
 		html.Link(html.Attributes{
-			html.AttributeHref: "base.css",
+			html.AttributeHref: "public/base.css",
 			html.AttributeType: "text/css",
 			html.AttributeRel:  "stylesheet",
 		}),

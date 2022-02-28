@@ -1,0 +1,48 @@
+<layout>
+	<row spacing="20">
+		<column spacing="10">
+			<el>
+				hello world!
+			</el>
+			<el>
+				hello world!
+			</el>
+			<el>
+				hello world!
+			</el>
+		</column>
+		<column spacing="10">
+			<el>
+				hello world!
+			</el>
+			<el>
+				hello world!
+			</el>
+			<el>
+				hello world!
+			</el>
+		</column>
+		<column spacing="10">
+			<el>
+				hello world!
+			</el>
+			<el>
+				hello world!
+			</el>
+			<el>
+				hello world!
+			</el>
+		</column>
+		<column spacing="10">
+			<el>
+				hello world!
+			</el>
+			<el>
+				hello world!
+			</el>
+			<el>
+				hello world!
+			</el>
+		</column>
+	</row>
+</layout>
