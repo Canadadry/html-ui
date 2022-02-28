@@ -3,7 +3,10 @@ package generator
 import (
 	"app/ast"
 	"app/pkg/html"
+	"fmt"
 	"io"
+	"sort"
+	"strings"
 )
 
 func Generate(el ast.El, w io.Writer) error {
@@ -58,19 +61,31 @@ func (g *generator) generateLayout(el ast.El) html.Tag {
 }
 
 func (g *generator) generateColumn(el ast.El) html.Tag {
-	g.css["spacing-10-10"] = struct{}{}
+	classes := []string{}
+	for _, attr := range el.Attr {
+		class := fmt.Sprintf("%s-%s-%s", attr.Type, attr.Value, attr.Value)
+		classes = append(classes, class)
+		g.css[class] = struct{}{}
+	}
+	sort.Strings(classes)
 	g.mode = modeColumn
 	return html.Div(
-		html.Attributes{html.AttributeClass: "hc spacing-10-10 s c wc ct cl"},
+		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s c wc ct cl", strings.Join(classes, " "))},
 		g.generate(el.Children)...,
 	)
 }
 
 func (g *generator) generateRow(el ast.El) html.Tag {
-	g.css["spacing-10-10"] = struct{}{}
+	classes := []string{}
+	for _, attr := range el.Attr {
+		class := fmt.Sprintf("%s-%s-%s", attr.Type, attr.Value, attr.Value)
+		classes = append(classes, class)
+		g.css[class] = struct{}{}
+	}
+	sort.Strings(classes)
 	g.mode = modeColumn
 	return html.Div(
-		html.Attributes{html.AttributeClass: "hc spacing-10-10 s r wc cl ccy"},
+		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s r wc cl ccy", strings.Join(classes, " "))},
 		g.generate(el.Children)...,
 	)
 }
@@ -104,41 +119,62 @@ func (g *generator) generateHead() []html.Tag {
 		}),
 	}
 
-	for _ = range g.css {
-		out = append(out, html.Style(`.spacing-10-10.r > .s + .s{
-  margin-left: 10px;
-}.spacing-10-10.wrp.r > .s{
-  margin: 5px 5px;
-}.spacing-10-10.c > .s + .s{
-  margin-top: 10px;
-}.spacing-10-10.pg > .s + .s{
-  margin-top: 10px;
-}.spacing-10-10.pg > .al{
-  margin-right: 10px;
-}.spacing-10-10.pg > .ar{
-  margin-left: 10px;
-}.spacing-10-10.p{
-  line-height: calc(1em + 10px);
-}textarea.s.spacing-10-10{
-  line-height: calc(1em + 10px);
-  height: calc(100% + 10px);
-}.spacing-10-10.p > .al{
-  margin-right: 10px;
-}.spacing-10-10.p > .ar{
-  margin-left: 10px;
-}.spacing-10-10.p::after{
-  content: '';
-  display: block;
-  height: 0;
-  width: 0;
-  margin-top: -5px;
-}.spacing-10-10.p::before{
-  content: '';
-  display: block;
-  height: 0;
-  width: 0;
-  margin-bottom: -5px;
-}`))
+	css := make([]string, 0, len(g.css))
+	for class := range g.css {
+		css = append(css, class)
+	}
+	sort.Strings(css)
+
+	style := ""
+
+	for _, class := range css {
+		if class == "spacing-10-10" {
+			spacing := strings.ReplaceAll(cssSpacing, "%spacing%", "10")
+			style += strings.ReplaceAll(spacing, "%spacing-half%", "5")
+		} else {
+			spacing := strings.ReplaceAll(cssSpacing, "%spacing%", "20")
+			style += strings.ReplaceAll(spacing, "%spacing-half%", "10")
+		}
+	}
+	if style != "" {
+		out = append(out, html.Style(style))
 	}
 	return out
 }
+
+const (
+	cssSpacing = `.spacing-%spacing%-%spacing%.r > .s + .s{
+  margin-left: %spacing%px;
+}.spacing-%spacing%-%spacing%.wrp.r > .s{
+  margin: %spacing-half%px %spacing-half%px;
+}.spacing-%spacing%-%spacing%.c > .s + .s{
+  margin-top: %spacing%px;
+}.spacing-%spacing%-%spacing%.pg > .s + .s{
+  margin-top: %spacing%px;
+}.spacing-%spacing%-%spacing%.pg > .al{
+  margin-right: %spacing%px;
+}.spacing-%spacing%-%spacing%.pg > .ar{
+  margin-left: %spacing%px;
+}.spacing-%spacing%-%spacing%.p{
+  line-height: calc(1em + %spacing%px);
+}textarea.s.spacing-%spacing%-%spacing%{
+  line-height: calc(1em + %spacing%px);
+  height: calc(100% + %spacing%px);
+}.spacing-%spacing%-%spacing%.p > .al{
+  margin-right: %spacing%px;
+}.spacing-%spacing%-%spacing%.p > .ar{
+  margin-left: %spacing%px;
+}.spacing-%spacing%-%spacing%.p::after{
+  content: '';
+  display: block;
+  height: 0;
+  width: 0;
+  margin-top: -%spacing-half%px;
+}.spacing-%spacing%-%spacing%.p::before{
+  content: '';
+  display: block;
+  height: 0;
+  width: 0;
+  margin-bottom: -%spacing-half%px;
+}`
+)
