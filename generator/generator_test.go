@@ -10,7 +10,10 @@ import (
 
 func TestGenerate(t *testing.T) {
 	tests := []string{
-		"test1", "test2", "test3", "test4",
+		"test1",
+		// "test2",
+		// "test3",
+		// "test4",
 	}
 
 	for _, tt := range tests {
