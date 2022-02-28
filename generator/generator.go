@@ -39,6 +39,8 @@ func (g *generator) generate(el []ast.El) []html.Tag {
 			out = append(out, g.generateLayout(item))
 		case ast.TypeElColumn:
 			out = append(out, g.generateColumn(item))
+		case ast.TypeElRow:
+			out = append(out, g.generateRow(item))
 		case ast.TypeElEl:
 			out = append(out, g.generateEl(item))
 		case ast.TypeElText:
@@ -63,6 +65,16 @@ func (g *generator) generateColumn(el ast.El) html.Tag {
 		g.generate(el.Children)...,
 	)
 }
+
+func (g *generator) generateRow(el ast.El) html.Tag {
+	g.css["spacing-10-10"] = struct{}{}
+	g.mode = modeColumn
+	return html.Div(
+		html.Attributes{html.AttributeClass: "hc spacing-10-10 s r wc cl ccy"},
+		g.generate(el.Children)...,
+	)
+}
+
 func (g *generator) generateEl(el ast.El) html.Tag {
 	if len(el.Children) == 0 {
 		return html.Tag{}
