@@ -21,6 +21,18 @@ func TestParser(t *testing.T) {
 			</el>
 		</el>
 	</row>
+</layout>`, `<layout>
+	<column spacing="10">
+		<el>
+			hello world!
+		</el>
+		<el>
+			hello world!
+		</el>
+		<el>
+			hello world!
+		</el>
+	</column>
 </layout>`,
 	}
 

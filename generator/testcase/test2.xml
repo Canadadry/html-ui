@@ -1,13 +1,13 @@
 <layout>
 	<column spacing="10">
-		<text>
+		<el>
 			hello world!
-		</text>
-		<text>
+		</el>
+		<el>
 			hello world!
-		</text>
-		<text>
+		</el>
+		<el>
 			hello world!
-		</text>
+		</el>
 	</column>
 </layout>

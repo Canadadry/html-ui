@@ -11,7 +11,7 @@ import (
 func TestGenerate(t *testing.T) {
 	tests := []string{
 		"test1",
-		// "test2",
+		"test2",
 		// "test3",
 		// "test4",
 	}
