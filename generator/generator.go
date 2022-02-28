@@ -93,6 +93,12 @@ func (g *generator) parseAttribute(attrs []ast.Attribute) string {
 				continue
 			}
 			class = fmt.Sprintf("bg-%d-%d-%d-255", c.R, c.G, c.B)
+		case ast.TypeAttrFontColor:
+			c, err := colors.FromString(attr.Value)
+			if err != nil {
+				continue
+			}
+			class = fmt.Sprintf("fc-%d-%d-%d-255", c.R, c.G, c.B)
 		default:
 			continue
 		}
@@ -164,6 +170,14 @@ func (g *generator) generateHead() []html.Tag {
 			}
 			style += fmt.Sprintf(`.%s{
   background-color: rgba(%d,%d,%d,1);
+}`, class, r, g, b)
+		case strings.HasPrefix(class, "fc-") && strings.HasSuffix(class, "-255"):
+			r, g, b, err := parseBgClass(class)
+			if err != nil {
+				continue
+			}
+			style += fmt.Sprintf(`.%s{
+  color: rgba(%d,%d,%d,1);
 }`, class, r, g, b)
 		}
 	}

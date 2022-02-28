@@ -1,5 +1,5 @@
 <layout>
-	<row spacing="100">
+	<row spacing="100" bg-color="pink">
 		<column spacing="35">
 			<el>hello world!</el>
 			<el>hello world!</el>
@@ -10,9 +10,9 @@
 			<el>hello world!</el>
 			<el>hello world!</el>
 		</column>
-		<column spacing="10">
+		<column spacing="10" bg-color="red">
 			<el>hello world!</el>
-			<el bg-color="blue">hello world!</el>
+			<el bg-color="blue" font-color="white">hello world!</el>
 			<el>hello world!</el>
 		</column>
 		<column spacing="100">
