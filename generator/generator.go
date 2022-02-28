@@ -144,16 +144,42 @@ func (g *generator) generateHead() []html.Tag {
 				continue
 			}
 			style += generateSpacing(part[1])
-		case strings.HasPrefix(class, "bg"):
-			style += `.bg-240-0-245-255{
-  background-color: rgba(240,0,245,1);
-}`
+		case strings.HasPrefix(class, "bg-") && strings.HasSuffix(class, "-255"):
+			r, g, b, err := parseBgClass(class)
+			if err != nil {
+				continue
+			}
+			style += fmt.Sprintf(`.%s{
+  background-color: rgba(%d,%d,%d,1);
+}`, class, r, g, b)
 		}
 	}
 	if style != "" {
 		out = append(out, html.Style(style))
 	}
 	return out
+}
+
+func parseBgClass(attribute string) (uint64, uint64, uint64, error) {
+	colorAttr := attribute[3 : len(attribute)-4]
+	colorPart := strings.Split(colorAttr, "-")
+	if len(colorPart) != 3 {
+		return 0, 0, 0, fmt.Errorf("invalid number of arg provider expected 3 got %d in %s", len(colorPart), colorAttr)
+	}
+	r, err := strconv.ParseUint(colorPart[0], 10, 8)
+	if err != nil {
+		return 0, 0, 0, fmt.Errorf("invalid parsing of argument 1 (%s) : %w", colorPart[0], err)
+	}
+	g, err := strconv.ParseUint(colorPart[1], 10, 8)
+	if err != nil {
+		return 0, 0, 0, fmt.Errorf("invalid parsing of argument 2 (%s) : %w", colorPart[0], err)
+	}
+	b, err := strconv.ParseUint(colorPart[2], 10, 8)
+	if err != nil {
+		return 0, 0, 0, fmt.Errorf("invalid parsing of argument 3 (%s) : %w", colorPart[0], err)
+	}
+
+	return r, g, b, nil
 }
 
 func generateSpacing(strSpace string) string {
