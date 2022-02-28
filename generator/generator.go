@@ -98,7 +98,15 @@ func (g *generator) generateEl(el ast.El) html.Tag {
 	if el.Children[0].Type != ast.TypeElText {
 		return html.Tag{}
 	}
-	return g.generateText(el.Children[0].Content)
+	if len(el.Attr) == 0 {
+		return g.generateText(el.Children[0].Content)
+	}
+	g.css["bg-240-0-245-255"] = struct{}{}
+	return html.Div(
+		html.Attributes{html.AttributeClass: "hc bg-240-0-245-255 s e wc"},
+		g.generateText(el.Children[0].Content),
+	)
+
 }
 
 func (g *generator) generateText(txt string) html.Tag {
@@ -129,12 +137,17 @@ func (g *generator) generateHead() []html.Tag {
 	style := ""
 
 	for _, class := range css {
-		if strings.HasPrefix(class, "spacing") {
+		switch true {
+		case strings.HasPrefix(class, "spacing"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
 				continue
 			}
 			style += generateSpacing(part[1])
+		case strings.HasPrefix(class, "bg"):
+			style += `.bg-240-0-245-255{
+  background-color: rgba(240,0,245,1);
+}`
 		}
 	}
 	if style != "" {

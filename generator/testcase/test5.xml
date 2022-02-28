@@ -1,0 +1,5 @@
+<layout>
+	<el bg-color="rgb(240,0,245)">
+		Hello world!
+	</el>
+</layout>
