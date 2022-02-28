@@ -2,6 +2,7 @@ package generator
 
 import (
 	"app/ast"
+	"app/pkg/colors"
 	"app/pkg/html"
 	"fmt"
 	"io"
@@ -62,33 +63,44 @@ func (g *generator) generateLayout(el ast.El) html.Tag {
 }
 
 func (g *generator) generateColumn(el ast.El) html.Tag {
-	classes := []string{}
-	for _, attr := range el.Attr {
-		class := fmt.Sprintf("%s-%s-%s", attr.Type, attr.Value, attr.Value)
-		classes = append(classes, class)
-		g.css[class] = struct{}{}
-	}
-	sort.Strings(classes)
+	classes := g.parseAttribute(el.Attr)
 	g.mode = modeColumn
 	return html.Div(
-		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s c wc ct cl", strings.Join(classes, " "))},
+		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s c wc ct cl", classes)},
 		g.generate(el.Children)...,
 	)
 }
 
 func (g *generator) generateRow(el ast.El) html.Tag {
+	classes := g.parseAttribute(el.Attr)
+	g.mode = modeColumn
+	return html.Div(
+		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s r wc cl ccy", classes)},
+		g.generate(el.Children)...,
+	)
+}
+
+func (g *generator) parseAttribute(attrs []ast.Attribute) string {
 	classes := []string{}
-	for _, attr := range el.Attr {
-		class := fmt.Sprintf("%s-%s-%s", attr.Type, attr.Value, attr.Value)
+	for _, attr := range attrs {
+		class := ""
+		switch attr.Type {
+		case ast.TypeAttrSpacing:
+			class = fmt.Sprintf("spacing-%s-%s", attr.Value, attr.Value)
+		case ast.TypeAttrBgColor:
+			c, err := colors.FromString(attr.Value)
+			if err != nil {
+				continue
+			}
+			class = fmt.Sprintf("bg-%d-%d-%d-255", c.R, c.G, c.B)
+		default:
+			continue
+		}
 		classes = append(classes, class)
 		g.css[class] = struct{}{}
 	}
 	sort.Strings(classes)
-	g.mode = modeColumn
-	return html.Div(
-		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s r wc cl ccy", strings.Join(classes, " "))},
-		g.generate(el.Children)...,
-	)
+	return strings.Join(classes, " ")
 }
 
 func (g *generator) generateEl(el ast.El) html.Tag {
@@ -101,9 +113,10 @@ func (g *generator) generateEl(el ast.El) html.Tag {
 	if len(el.Attr) == 0 {
 		return g.generateText(el.Children[0].Content)
 	}
-	g.css["bg-240-0-245-255"] = struct{}{}
+	classes := g.parseAttribute(el.Attr)
+	g.mode = modeNormal
 	return html.Div(
-		html.Attributes{html.AttributeClass: "hc bg-240-0-245-255 s e wc"},
+		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s e wc", classes)},
 		g.generateText(el.Children[0].Content),
 	)
 
