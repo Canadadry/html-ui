@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -128,12 +129,12 @@ func (g *generator) generateHead() []html.Tag {
 	style := ""
 
 	for _, class := range css {
-		if class == "spacing-10-10" {
-			spacing := strings.ReplaceAll(cssSpacing, "%spacing%", "10")
-			style += strings.ReplaceAll(spacing, "%spacing-half%", "5")
-		} else {
-			spacing := strings.ReplaceAll(cssSpacing, "%spacing%", "20")
-			style += strings.ReplaceAll(spacing, "%spacing-half%", "10")
+		if strings.HasPrefix(class, "spacing") {
+			part := strings.Split(class, "-")
+			if len(part) != 3 {
+				continue
+			}
+			style += generateSpacing(part[1])
 		}
 	}
 	if style != "" {
@@ -142,8 +143,8 @@ func (g *generator) generateHead() []html.Tag {
 	return out
 }
 
-const (
-	cssSpacing = `.spacing-%spacing%-%spacing%.r > .s + .s{
+func generateSpacing(strSpace string) string {
+	cssSpacing := `.spacing-%spacing%-%spacing%.r > .s + .s{
   margin-left: %spacing%px;
 }.spacing-%spacing%-%spacing%.wrp.r > .s{
   margin: %spacing-half%px %spacing-half%px;
@@ -177,4 +178,7 @@ const (
   width: 0;
   margin-bottom: -%spacing-half%px;
 }`
-)
+	space, _ := strconv.ParseInt(strSpace, 10, 64)
+	cssSpacing = strings.ReplaceAll(cssSpacing, "%spacing%", fmt.Sprintf("%d", space))
+	return strings.ReplaceAll(cssSpacing, "%spacing-half%", fmt.Sprintf("%d", space/2))
+}

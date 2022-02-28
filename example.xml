@@ -1,48 +1,24 @@
 <layout>
-	<row spacing="20">
-		<column spacing="10">
-			<el>
-				hello world!
-			</el>
-			<el>
-				hello world!
-			</el>
-			<el>
-				hello world!
-			</el>
+	<row spacing="100">
+		<column spacing="35">
+			<el>hello world!</el>
+			<el>hello world!</el>
+			<el>hello world!</el>
 		</column>
 		<column spacing="10">
-			<el>
-				hello world!
-			</el>
-			<el>
-				hello world!
-			</el>
-			<el>
-				hello world!
-			</el>
+			<el>hello world!</el>
+			<el>hello world!</el>
+			<el>hello world!</el>
 		</column>
 		<column spacing="10">
-			<el>
-				hello world!
-			</el>
-			<el>
-				hello world!
-			</el>
-			<el>
-				hello world!
-			</el>
+			<el>hello world!</el>
+			<el>hello world!</el>
+			<el>hello world!</el>
 		</column>
-		<column spacing="10">
-			<el>
-				hello world!
-			</el>
-			<el>
-				hello world!
-			</el>
-			<el>
-				hello world!
-			</el>
+		<column spacing="100">
+			<el>hello world!</el>
+			<el>hello world!</el>
+			<el>hello world!</el>
 		</column>
 	</row>
 </layout>
