@@ -12,7 +12,7 @@
 		</column>
 		<column width="portion:5" spacing="10" bg-color="red">
 			<el>hello world!</el>
-			<el bg-color="blue" font-color="white">hello world!</el>
+			<el bg-color="blue" font-color="white" font-size="40" padding="40">hello world!</el>
 			<el>hello world!</el>
 		</column>
 		<column width="px:200" spacing="100">

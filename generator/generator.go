@@ -222,10 +222,10 @@ func (g *generator) generateHead() []html.Tag {
 			style += generateSpacing(part[1])
 		case strings.HasPrefix(class, "font-size-"):
 			part := strings.Split(class, "-")
-			if len(part) != 2 {
+			if len(part) != 3 {
 				continue
 			}
-			style += generateFontSize(part[1])
+			style += generateFontSize(part[2])
 		case strings.HasPrefix(class, "p-"):
 			part := strings.Split(class, "-")
 			if len(part) != 2 {
@@ -305,8 +305,8 @@ func parseBgClass(attribute string) (uint64, uint64, uint64, error) {
 
 func generateFontSize(strSize string) string {
 	css := `.font-size-%size%{
-	  font-size: %size%px;
-	}`
+  font-size: %size%px;
+}`
 	size, _ := strconv.ParseInt(strSize, 10, 64)
 	if size < 33 {
 		return ""
@@ -316,8 +316,8 @@ func generateFontSize(strSize string) string {
 
 func generatePadding(strSize string) string {
 	css := `.p-%size%{
-	  padding: %size% %size% %size% %size%px;
-	}`
+  padding: %size%px %size%px %size%px %size%px;
+}`
 	size, _ := strconv.ParseInt(strSize, 10, 64)
 	if size < 25 {
 		return ""

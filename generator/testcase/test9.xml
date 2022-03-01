@@ -3,7 +3,7 @@
 		<el bg-color="rgb(100,124,0)" width="px:100">
 			hello world!
 		</el>
-		<el bg-color="rgb(100,124,0)" width="portion:2" font-size="40" padding="20">
+		<el bg-color="rgb(100,124,0)" width="portion:2" font-size="40" padding="40">
 			hello world!
 		</el>
 		<el bg-color="rgb(200,24,0)" width="portion:8">
