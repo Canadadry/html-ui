@@ -106,6 +106,8 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 			class = fmt.Sprintf("font-size-%s", attr.Value)
 		case ast.TypeAttrBorderWidth:
 			class = fmt.Sprintf("b-%s", attr.Value)
+		case ast.TypeAttrBorderRounded:
+			class = fmt.Sprintf("br-%s", attr.Value)
 		case ast.TypeAttrPadding:
 			class = fmt.Sprintf("p-%s", attr.Value)
 		case ast.TypeAttrBgColor:
@@ -320,6 +322,12 @@ func (g *generator) generateHead() []html.Tag {
 				continue
 			}
 			style += generateBorder(part[1])
+		case strings.HasPrefix(class, "br-"):
+			part := strings.Split(class, "-")
+			if len(part) != 2 {
+				continue
+			}
+			style += generateBorderRounded(part[1])
 		case strings.HasPrefix(class, "width-"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
@@ -449,6 +457,13 @@ func generatePadding(strSize string) string {
 func generateBorder(strSize string) string {
 	css := `.b-%size%{
   border-width: %size%px %size%px %size%px %size%px;
+}`
+	return strings.ReplaceAll(css, "%size%", strSize)
+}
+
+func generateBorderRounded(strSize string) string {
+	css := `.br-%size%{
+  border-radius: %size%px;
 }`
 	return strings.ReplaceAll(css, "%size%", strSize)
 }

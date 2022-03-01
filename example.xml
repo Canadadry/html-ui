@@ -7,7 +7,7 @@
 		</column>
 		<column width="portion:2" spacing="10">
 			<el>hello world!</el>
-			<el border-width="10" border-color="red">hello world!</el>
+			<el border-width="10" border-color="red" border-rounded="10">hello world!</el>
 			<el>hello world!</el>
 		</column>
 		<column width="portion:5" spacing="10" bg-color="red">
