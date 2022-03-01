@@ -1,0 +1,13 @@
+<layout>
+	<row spacing="10" bg-color="rgb(240,0,245)" width="fill">
+		<el bg-color="rgb(100,124,0)" width="px:100">
+			hello world!
+		</el>
+		<el bg-color="rgb(100,124,0)" width="portion:2" font-size="40" padding="20">
+			hello world!
+		</el>
+		<el bg-color="rgb(200,24,0)" width="portion:8">
+			hello world!
+		</el>
+	</row>
+</layout>

@@ -101,6 +101,10 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 		switch attr.Type {
 		case ast.TypeAttrSpacing:
 			class = fmt.Sprintf("spacing-%s-%s", attr.Value, attr.Value)
+		case ast.TypeAttrFontSize:
+			class = fmt.Sprintf("font-size-%s", attr.Value)
+		case ast.TypeAttrPadding:
+			class = fmt.Sprintf("p-%s", attr.Value)
 		case ast.TypeAttrBgColor:
 			c, err := colors.FromString(attr.Value)
 			if err != nil {
@@ -210,13 +214,25 @@ func (g *generator) generateHead() []html.Tag {
 
 	for _, class := range css {
 		switch true {
-		case strings.HasPrefix(class, "spacing"):
+		case strings.HasPrefix(class, "spacing-"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
 				continue
 			}
 			style += generateSpacing(part[1])
-		case strings.HasPrefix(class, "width"):
+		case strings.HasPrefix(class, "font-size-"):
+			part := strings.Split(class, "-")
+			if len(part) != 2 {
+				continue
+			}
+			style += generateFontSize(part[1])
+		case strings.HasPrefix(class, "p-"):
+			part := strings.Split(class, "-")
+			if len(part) != 2 {
+				continue
+			}
+			style += generatePadding(part[1])
+		case strings.HasPrefix(class, "width-"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
 				continue
@@ -285,6 +301,28 @@ func parseBgClass(attribute string) (uint64, uint64, uint64, error) {
 	}
 
 	return r, g, b, nil
+}
+
+func generateFontSize(strSize string) string {
+	css := `.font-size-%size%{
+	  font-size: %size%px;
+	}`
+	size, _ := strconv.ParseInt(strSize, 10, 64)
+	if size < 33 {
+		return ""
+	}
+	return strings.ReplaceAll(css, "%size%", strSize)
+}
+
+func generatePadding(strSize string) string {
+	css := `.p-%size%{
+	  padding: %size% %size% %size% %size%px;
+	}`
+	size, _ := strconv.ParseInt(strSize, 10, 64)
+	if size < 25 {
+		return ""
+	}
+	return strings.ReplaceAll(css, "%size%", strSize)
 }
 
 func generateSpacing(strSpace string) string {

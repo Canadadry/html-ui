@@ -14,17 +14,19 @@ const (
 	TypeAttrPadding                = "padding"
 	TypeAttrBgColor                = "bg-color"
 	TypeAttrFontColor              = "font-color"
+	TypeAttrFontSize               = "font-size"
 	TypeAttrBorderRounded          = "border-rounded"
 )
 
 var ValidAttrType = map[AttrType]struct{}{
-	TypeAttrWidth:         struct{}{},
-	TypeAttrAlign:         struct{}{},
-	TypeAttrSpacing:       struct{}{},
-	TypeAttrPadding:       struct{}{},
-	TypeAttrBgColor:       struct{}{},
-	TypeAttrFontColor:     struct{}{},
-	TypeAttrBorderRounded: struct{}{},
+	TypeAttrWidth:         {},
+	TypeAttrAlign:         {},
+	TypeAttrSpacing:       {},
+	TypeAttrPadding:       {},
+	TypeAttrBgColor:       {},
+	TypeAttrFontColor:     {},
+	TypeAttrFontSize:      {},
+	TypeAttrBorderRounded: {},
 }
 
 type Attribute struct {
