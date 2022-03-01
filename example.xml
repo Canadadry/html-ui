@@ -16,9 +16,9 @@
 			<el>hello world!</el>
 		</column>
 		<column spacing="100">
-			<el>hello world!</el>
-			<el>hello world!</el>
-			<el>hello world!</el>
+			<el>hello world! 123</el>
+			<el>hello world! 123</el>
+			<el>hello world! 123</el>
 		</column>
 	</row>
 </layout>
