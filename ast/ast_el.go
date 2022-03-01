@@ -15,14 +15,16 @@ const (
 	TypeElRow           = "row"
 	TypeElColumn        = "column"
 	TypeElLayout        = "layout"
+	TypeElImage         = "img"
 )
 
 var ValidElType = map[ElType]struct{}{
-	TypeElText:   struct{}{},
-	TypeElEl:     struct{}{},
-	TypeElRow:    struct{}{},
-	TypeElColumn: struct{}{},
-	TypeElLayout: struct{}{},
+	TypeElText:   {},
+	TypeElEl:     {},
+	TypeElRow:    {},
+	TypeElColumn: {},
+	TypeElLayout: {},
+	TypeElImage:  {},
 }
 
 type El struct {

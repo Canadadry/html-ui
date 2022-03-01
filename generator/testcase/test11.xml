@@ -1,0 +1,13 @@
+<layout>
+	<column spacing="10" bg-color="rgb(240,0,245)" height="fill">
+		<el bg-color="rgb(100,124,0)" height="px:100">
+			hello world!
+		</el>
+		<el bg-color="rgb(100,124,0)" height="portion:2" font-size="40" padding="40">
+			<img src="https://synbioz-website-attachments.s3.eu-west-1.amazonaws.com/articles/20170617/elm-europe.png" alt="lol"></img>
+		</el>
+		<el bg-color="rgb(200,24,0)" height="portion:8">
+			hello world!
+		</el>
+	</column>
+</layout>

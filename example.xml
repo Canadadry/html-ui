@@ -15,9 +15,11 @@
 			<el bg-color="blue" font-color="white" font-size="40" padding="40">hello world!</el>
 			<el>hello world!</el>
 		</column>
-		<column width="px:200" spacing="100">
+		<column width="px:320" spacing="100">
 			<el>hello world! 123</el>
-			<el>hello world! 123</el>
+			<el>
+				<img src="https://synbioz-website-attachments.s3.eu-west-1.amazonaws.com/articles/20170617/elm-europe.png" alt="lol"></img>
+			</el>
 			<el>hello world! 123</el>
 		</column>
 	</row>

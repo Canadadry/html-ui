@@ -17,6 +17,8 @@ const (
 	TypeAttrFontColor              = "font-color"
 	TypeAttrFontSize               = "font-size"
 	TypeAttrBorderRounded          = "border-rounded"
+	TypeAttrSrc                    = "src"
+	TypeAttrAlt                    = "alt"
 )
 
 var ValidAttrType = map[AttrType]struct{}{
@@ -29,6 +31,8 @@ var ValidAttrType = map[AttrType]struct{}{
 	TypeAttrFontColor:     {},
 	TypeAttrFontSize:      {},
 	TypeAttrBorderRounded: {},
+	TypeAttrSrc:           {},
+	TypeAttrAlt:           {},
 }
 
 type Attribute struct {

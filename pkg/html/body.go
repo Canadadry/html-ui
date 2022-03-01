@@ -168,7 +168,7 @@ func Button(attr Attributes, children ...Tag) Tag {
 func Img(attr Attributes) Tag {
 	return Tag{
 		Name:            "img",
-		AttributesNames: []attribute{AttributeId, AttributeSrc, AttributeClass, AttributeStyle, AttributeDataTest},
+		AttributesNames: []attribute{AttributeId, AttributeSrc, AttributeClass, AttributeStyle, AttributeAlt, AttributeDataTest},
 		Attributes:      attr,
 		Closed:          true,
 	}

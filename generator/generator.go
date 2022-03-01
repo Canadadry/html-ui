@@ -48,6 +48,8 @@ func (g *generator) generate(el []ast.El) []html.Tag {
 			out = append(out, g.generateRow(item))
 		case ast.TypeElEl:
 			out = append(out, g.generateEl(item))
+		case ast.TypeElImage:
+			out = append(out, g.generateImage(item))
 		case ast.TypeElText:
 			out = append(out, g.generateText(item.Content))
 		}
@@ -192,9 +194,22 @@ func (g *generator) generateEl(el ast.El) html.Tag {
 	if len(el.Children) == 0 {
 		return html.Tag{}
 	}
-	if el.Children[0].Type != ast.TypeElText {
-		return html.Tag{}
+	if el.Children[0].Type == ast.TypeElText {
+		return g.generateElText(el)
 	}
+	base := map[string]struct{}{
+		"s": {},
+		"e": {},
+	}
+	classes := g.parseAttribute(el.Attr, base)
+	g.mode = modeNormal
+	return html.Div(
+		html.Attributes{html.AttributeClass: classes},
+		g.generate(el.Children)...,
+	)
+}
+
+func (g *generator) generateElText(el ast.El) html.Tag {
 	if len(el.Attr) == 0 {
 		return g.generateText(el.Children[0].Content)
 	}
@@ -208,7 +223,29 @@ func (g *generator) generateEl(el ast.El) html.Tag {
 		html.Attributes{html.AttributeClass: classes},
 		g.generateText(el.Children[0].Content),
 	)
+}
 
+func (g *generator) generateImage(el ast.El) html.Tag {
+	src := ""
+	alt := ""
+	for _, attr := range el.Attr {
+		if attr.Type == ast.TypeAttrSrc {
+			src = attr.Value
+		}
+		if attr.Type == ast.TypeAttrAlt {
+			alt = attr.Value
+		}
+	}
+	return html.Div(
+		html.Attributes{html.AttributeClass: "s e ic"},
+		html.Img(
+			html.Attributes{
+				html.AttributeClass: "s e",
+				html.AttributeSrc:   src,
+				html.AttributeAlt:   alt,
+			},
+		),
+	)
 }
 
 func (g *generator) generateText(txt string) html.Tag {
