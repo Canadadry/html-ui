@@ -1,0 +1,37 @@
+<layout>
+	<column spacing="10" padding="10" bg-color="blue">
+		<row spacing="10">
+			<el width="px:100" height="px:100" bg-color="red">
+				<el align="bottom,right" width="px:10" height="px:10" bg-color="green"><none></none></el>
+			</el>
+			<el width="px:100" height="px:100" bg-color="red">
+				<el align="bottom,centerX" width="px:10" height="px:10" bg-color="green"><none></none></el>
+			</el>
+			<el width="px:100" height="px:100" bg-color="red">
+				<el align="bottom,left" width="px:10" height="px:10" bg-color="green"><none></none></el>
+			</el>
+		</row>
+		<row spacing="10">
+			<el width="px:100" height="px:100" bg-color="red">
+				<el align="centerY,right" width="px:10" height="px:10" bg-color="green"><none></none></el>
+			</el>
+			<el width="px:100" height="px:100" bg-color="red">
+				<el align="centerY,centerX" width="px:10" height="px:10" bg-color="green"><none></none></el>
+			</el>
+			<el width="px:100" height="px:100" bg-color="red">
+				<el align="centerY,left" width="px:10" height="px:10" bg-color="green"><none></none></el>
+			</el>
+		</row>
+		<row spacing="10">
+			<el width="px:100" height="px:100" bg-color="red">
+				<el align="top,right" width="px:10" height="px:10" bg-color="green"><none></none></el>
+			</el>
+			<el width="px:100" height="px:100" bg-color="red">
+				<el align="top,centerX" width="px:10" height="px:10" bg-color="green"><none></none></el>
+			</el>
+			<el width="px:100" height="px:100" bg-color="red">
+				<el align="top,left" width="px:10" height="px:10" bg-color="green"><none></none></el>
+			</el>
+		</row>
+	</column>
+</layout>

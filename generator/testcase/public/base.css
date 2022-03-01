@@ -1,16 +1,3 @@
-div[style*="z-index: 2147483647"][style*="background-color: rgb(18, 147, 216)"] { display: none !important; }</style><style>
-        div[style*="z-index: 2147483646"][style*="background-color: rgba(200, 200, 200, 0.7)"] {
-          position: fixed;
-          top: 0;
-          left: 0;
-        }
-        .elm-overlay {
-          z-index: 2147483646 !important;
-        }
-        .elm-mini-controls {
-          display: none !important;
-        }
-
 		@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {.s.r > .s { flex-basis: auto !important; } .s.r > .s.ctr { flex-basis: auto !important; }}
 		input[type="search"],
 		input[type="search"]::-webkit-search-decoration,
