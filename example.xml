@@ -1,9 +1,9 @@
 <layout>
-	<row width="fill" spacing="100" bg-color="pink">
-		<column width="px:200" spacing="35">
-			<el>hello world!</el>
-			<el>hello world!</el>
-			<el>hello world!</el>
+	<row width="fill" height="fill" spacing="100" bg-color="pink">
+		<column width="px:200" spacing="35" bg-color="green" height="fill">
+			<el height="portion:1">hello world!</el>
+			<el height="portion:2">hello world!</el>
+			<el height="portion:3">hello world!</el>
 		</column>
 		<column width="portion:2" spacing="10">
 			<el>hello world!</el>

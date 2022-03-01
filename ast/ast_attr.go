@@ -9,6 +9,7 @@ type AttrType string
 
 const (
 	TypeAttrWidth         AttrType = "width"
+	TypeAttrHeight                 = "height"
 	TypeAttrAlign                  = "align"
 	TypeAttrSpacing                = "spacing"
 	TypeAttrPadding                = "padding"
@@ -20,6 +21,7 @@ const (
 
 var ValidAttrType = map[AttrType]struct{}{
 	TypeAttrWidth:         {},
+	TypeAttrHeight:        {},
 	TypeAttrAlign:         {},
 	TypeAttrSpacing:       {},
 	TypeAttrPadding:       {},
