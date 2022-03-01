@@ -63,25 +63,40 @@ func (g *generator) generateLayout(el ast.El) html.Tag {
 }
 
 func (g *generator) generateColumn(el ast.El) html.Tag {
-	classes := g.parseAttribute(el.Attr)
+	base := map[string]struct{}{
+		"hc": {},
+		"s":  {},
+		"c":  {},
+		"wc": {},
+		"ct": {},
+		"cl": {},
+	}
+	classes := g.parseAttribute(el.Attr, base)
 	g.mode = modeColumn
 	return html.Div(
-		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s c wc ct cl", classes)},
+		html.Attributes{html.AttributeClass: classes},
 		g.generate(el.Children)...,
 	)
 }
 
 func (g *generator) generateRow(el ast.El) html.Tag {
-	classes := g.parseAttribute(el.Attr)
+	base := map[string]struct{}{
+		"hc":  {},
+		"s":   {},
+		"r":   {},
+		"wc":  {},
+		"cl":  {},
+		"ccy": {},
+	}
+	classes := g.parseAttribute(el.Attr, base)
 	g.mode = modeColumn
 	return html.Div(
-		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s r wc cl ccy", classes)},
+		html.Attributes{html.AttributeClass: classes},
 		g.generate(el.Children)...,
 	)
 }
 
-func (g *generator) parseAttribute(attrs []ast.Attribute) string {
-	classes := []string{}
+func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct{}) string {
 	for _, attr := range attrs {
 		class := ""
 		switch attr.Type {
@@ -102,8 +117,12 @@ func (g *generator) parseAttribute(attrs []ast.Attribute) string {
 		default:
 			continue
 		}
-		classes = append(classes, class)
+		base[class] = struct{}{}
 		g.css[class] = struct{}{}
+	}
+	classes := make([]string, 0, len(base))
+	for c := range base {
+		classes = append(classes, c)
 	}
 	sort.Strings(classes)
 	return strings.Join(classes, " ")
@@ -119,10 +138,16 @@ func (g *generator) generateEl(el ast.El) html.Tag {
 	if len(el.Attr) == 0 {
 		return g.generateText(el.Children[0].Content)
 	}
-	classes := g.parseAttribute(el.Attr)
+	base := map[string]struct{}{
+		"hc": {},
+		"s":  {},
+		"e":  {},
+		"wc": {},
+	}
+	classes := g.parseAttribute(el.Attr, base)
 	g.mode = modeNormal
 	return html.Div(
-		html.Attributes{html.AttributeClass: fmt.Sprintf("hc %s s e wc", classes)},
+		html.Attributes{html.AttributeClass: classes},
 		g.generateText(el.Children[0].Content),
 	)
 
