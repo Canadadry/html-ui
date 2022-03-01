@@ -17,6 +17,7 @@ const (
 	TypeAttrFontColor              = "font-color"
 	TypeAttrFontSize               = "font-size"
 	TypeAttrBorderRounded          = "border-rounded"
+	TypeAttrBorderColor            = "border-color"
 	TypeAttrBorderWidth            = "border-width"
 	TypeAttrSrc                    = "src"
 	TypeAttrAlt                    = "alt"
@@ -32,6 +33,7 @@ var ValidAttrType = map[AttrType]struct{}{
 	TypeAttrFontColor:     {},
 	TypeAttrFontSize:      {},
 	TypeAttrBorderWidth:   {},
+	TypeAttrBorderColor:   {},
 	TypeAttrBorderRounded: {},
 	TypeAttrSrc:           {},
 	TypeAttrAlt:           {},

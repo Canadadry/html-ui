@@ -120,6 +120,12 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 				continue
 			}
 			class = fmt.Sprintf("fc-%d-%d-%d-255", c.R, c.G, c.B)
+		case ast.TypeAttrBorderColor:
+			c, err := colors.FromString(attr.Value)
+			if err != nil {
+				continue
+			}
+			class = fmt.Sprintf("bc-%d-%d-%d-255", c.R, c.G, c.B)
 		case ast.TypeAttrWidth:
 			var err error
 			var sup string
@@ -351,6 +357,14 @@ func (g *generator) generateHead() []html.Tag {
 			}
 			style += fmt.Sprintf(`.%s{
   color: rgba(%d,%d,%d,1);
+}`, class, r, g, b)
+		case strings.HasPrefix(class, "bc-") && strings.HasSuffix(class, "-255"):
+			r, g, b, err := parseBgClass(class)
+			if err != nil {
+				continue
+			}
+			style += fmt.Sprintf(`.%s{
+  border-color: rgba(%d,%d,%d,1);
 }`, class, r, g, b)
 		}
 	}
