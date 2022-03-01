@@ -156,11 +156,19 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 			if sup != "" {
 				base[sup] = struct{}{}
 			}
+		case ast.TypeAttrAlign:
+			alignClasses := parseAlignAttr(attr.Value)
+			for _, c := range alignClasses {
+				base[c] = struct{}{}
+			}
+
 		default:
 			continue
 		}
-		base[class] = struct{}{}
-		g.css[class] = struct{}{}
+		if class != "" {
+			base[class] = struct{}{}
+			g.css[class] = struct{}{}
+		}
 	}
 	if !hasWidthAttr {
 		base["wc"] = struct{}{}
@@ -174,6 +182,28 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 	}
 	sort.Strings(classes)
 	return strings.Join(classes, " ")
+}
+
+func parseAlignAttr(align string) []string {
+	aligns := strings.Split(align, ",")
+	out := []string{}
+	for _, a := range aligns {
+		switch a {
+		case "left":
+			out = append(out, "av", "al")
+		case "right":
+			out = append(out, "av", "ar")
+		case "centerX":
+			out = append(out, "av", "cx")
+		case "top":
+			out = append(out, "ah", "at")
+		case "bottom":
+			out = append(out, "ah", "ab")
+		case "centerY":
+			out = append(out, "ah", "cy")
+		}
+	}
+	return out
 }
 
 func parseWidthAttr(width string) (string, string, error) {
@@ -201,10 +231,7 @@ func parseHeightAttr(width string) (string, string, error) {
 }
 
 func (g *generator) generateEl(el ast.El) html.Tag {
-	if len(el.Children) == 0 {
-		return html.Tag{}
-	}
-	if el.Children[0].Type == ast.TypeElText {
+	if len(el.Children) > 0 && el.Children[0].Type == ast.TypeElText {
 		return g.generateElText(el)
 	}
 	base := map[string]struct{}{
@@ -213,10 +240,14 @@ func (g *generator) generateEl(el ast.El) html.Tag {
 	}
 	classes := g.parseAttribute(el.Attr, base)
 	g.mode = modeNormal
-	return html.Div(
+	tag := html.Div(
 		html.Attributes{html.AttributeClass: classes},
 		g.generate(el.Children)...,
 	)
+	if len(el.Children) == 0 {
+		return html.Inline(tag)
+	}
+	return tag
 }
 
 func (g *generator) generateElText(el ast.El) html.Tag {

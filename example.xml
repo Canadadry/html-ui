@@ -5,22 +5,22 @@
 			<el height="portion:2">hello world!</el>
 			<el height="portion:3">hello world!</el>
 		</column>
-		<column width="portion:2" spacing="10">
+		<column width="portion:2" spacing="10" align="bottom" bg-color="lime">
 			<el>hello world!</el>
 			<el border-width="10" border-color="red" border-rounded="10">hello world!</el>
 			<el>hello world!</el>
 		</column>
-		<column width="portion:5" spacing="10" bg-color="red">
+		<column width="portion:5" spacing="10" bg-color="red" align="top">
 			<el>hello world!</el>
-			<el bg-color="blue" font-color="white" font-size="40" padding="40">hello world!</el>
+			<el bg-color="blue" font-color="white" font-size="40" padding="40" align="centerX">hello world!</el>
 			<el>hello world!</el>
 		</column>
-		<column width="px:320" spacing="100">
-			<el>hello world! 123</el>
-			<el>
+		<column width="px:320" spacing="100" >
+			<el align="right">hello world! 123</el>
+			<el align="right">
 				<img width="px:128" src="https://synbioz-website-attachments.s3.eu-west-1.amazonaws.com/articles/20170617/elm-europe.png" alt="lol"></img>
 			</el>
-			<el>hello world! 123</el>
+			<el align="right">hello world! 123</el>
 		</column>
 	</row>
 </layout>
