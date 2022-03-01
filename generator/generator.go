@@ -236,11 +236,22 @@ func (g *generator) generateImage(el ast.El) html.Tag {
 			alt = attr.Value
 		}
 	}
+	divClasses := g.parseAttribute(el.Attr, map[string]struct{}{"s": {}, "e": {}, "ic": {}})
+	divClasses = strings.ReplaceAll(divClasses, "hc ", "")
+	divClasses = strings.ReplaceAll(divClasses, "wc ", "")
+	divClasses = strings.ReplaceAll(divClasses, " wc", "")
+	if strings.Contains(divClasses, "he") {
+		divClasses = strings.ReplaceAll(divClasses, "ic", "i")
+	}
+	imgClasses := g.parseAttribute(el.Attr, map[string]struct{}{"s": {}, "e": {}})
+	imgClasses = strings.ReplaceAll(imgClasses, "hc ", "")
+	imgClasses = strings.ReplaceAll(imgClasses, "wc ", "")
+	imgClasses = strings.ReplaceAll(imgClasses, " wc", "")
 	return html.Div(
-		html.Attributes{html.AttributeClass: "s e ic"},
+		html.Attributes{html.AttributeClass: divClasses},
 		html.Img(
 			html.Attributes{
-				html.AttributeClass: "s e",
+				html.AttributeClass: imgClasses,
 				html.AttributeSrc:   src,
 				html.AttributeAlt:   alt,
 			},
