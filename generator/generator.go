@@ -67,7 +67,6 @@ func (g *generator) generateColumn(el ast.El) html.Tag {
 		"hc": {},
 		"s":  {},
 		"c":  {},
-		"wc": {},
 		"ct": {},
 		"cl": {},
 	}
@@ -84,7 +83,6 @@ func (g *generator) generateRow(el ast.El) html.Tag {
 		"hc":  {},
 		"s":   {},
 		"r":   {},
-		"wc":  {},
 		"cl":  {},
 		"ccy": {},
 	}
@@ -97,6 +95,7 @@ func (g *generator) generateRow(el ast.El) html.Tag {
 }
 
 func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct{}) string {
+	hasWidthAttr := false
 	for _, attr := range attrs {
 		class := ""
 		switch attr.Type {
@@ -115,16 +114,28 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 			}
 			class = fmt.Sprintf("fc-%d-%d-%d-255", c.R, c.G, c.B)
 		case ast.TypeAttrWidth:
+
 			var err error
-			class, err = parseWidthAttr(attr.Value)
+			var sup string
+			class, sup, err = parseWidthAttr(attr.Value)
 			if err != nil {
 				continue
+			}
+			hasWidthAttr = true
+			if class == "width-fill" {
+				class = "wf"
+			}
+			if sup != "" {
+				base[sup] = struct{}{}
 			}
 		default:
 			continue
 		}
 		base[class] = struct{}{}
 		g.css[class] = struct{}{}
+	}
+	if !hasWidthAttr {
+		base["wc"] = struct{}{}
 	}
 	classes := make([]string, 0, len(base))
 	for c := range base {
@@ -134,16 +145,16 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 	return strings.Join(classes, " ")
 }
 
-func parseWidthAttr(width string) (string, error) {
+func parseWidthAttr(width string) (string, string, error) {
 	if strings.HasPrefix(width, "px:") {
 		num, err := strconv.ParseInt(width[3:], 10, 64)
-		return fmt.Sprintf("width-px-%d", num), err
+		return fmt.Sprintf("width-px-%d", num), "we", err
 	}
 	if strings.HasPrefix(width, "portion:") {
 		num, err := strconv.ParseInt(width[8:], 10, 64)
-		return fmt.Sprintf("width-fill-%d", num), err
+		return fmt.Sprintf("width-fill-%d", num), "wfp", err
 	}
-	return "width-fill", nil
+	return "width-fill", "", nil
 }
 
 func (g *generator) generateEl(el ast.El) html.Tag {
@@ -160,7 +171,6 @@ func (g *generator) generateEl(el ast.El) html.Tag {
 		"hc": {},
 		"s":  {},
 		"e":  {},
-		"wc": {},
 	}
 	classes := g.parseAttribute(el.Attr, base)
 	g.mode = modeNormal
@@ -211,7 +221,12 @@ func (g *generator) generateHead() []html.Tag {
 			if len(part) != 3 {
 				continue
 			}
-			style += generateSpacing(part[1])
+			kind := part[1]
+			value, err := strconv.ParseInt(part[2], 10, 64)
+			if err != nil {
+				continue
+			}
+			style += generateWidth(kind, value)
 		case strings.HasPrefix(class, "bg-") && strings.HasSuffix(class, "-255"):
 			r, g, b, err := parseBgClass(class)
 			if err != nil {
@@ -234,6 +249,20 @@ func (g *generator) generateHead() []html.Tag {
 		out = append(out, html.Style(style))
 	}
 	return out
+}
+
+func generateWidth(kind string, value int64) string {
+	switch kind {
+	case "fill":
+		return fmt.Sprintf(`.s.r > .width-fill-%d{
+  flex-grow: %d;
+}`, value, value*100000)
+	case "px":
+		return fmt.Sprintf(`.width-px-%d{
+  width: %dpx;
+}`, value, value)
+	}
+	return ""
 }
 
 func parseBgClass(attribute string) (uint64, uint64, uint64, error) {
