@@ -99,6 +99,12 @@ func (g *generator) parseAttribute(attrs []ast.Attribute) string {
 				continue
 			}
 			class = fmt.Sprintf("fc-%d-%d-%d-255", c.R, c.G, c.B)
+		case ast.TypeAttrWidth:
+			var err error
+			class, err = parseWidthAttr(attr.Value)
+			if err != nil {
+				continue
+			}
 		default:
 			continue
 		}
@@ -107,6 +113,18 @@ func (g *generator) parseAttribute(attrs []ast.Attribute) string {
 	}
 	sort.Strings(classes)
 	return strings.Join(classes, " ")
+}
+
+func parseWidthAttr(width string) (string, error) {
+	if strings.HasPrefix(width, "px:") {
+		num, err := strconv.ParseInt(width[3:], 10, 64)
+		return fmt.Sprintf("width-px-%d", num), err
+	}
+	if strings.HasPrefix(width, "portion:") {
+		num, err := strconv.ParseInt(width[8:], 10, 64)
+		return fmt.Sprintf("width-fill-%d", num), err
+	}
+	return "width-fill", nil
 }
 
 func (g *generator) generateEl(el ast.El) html.Tag {
@@ -158,6 +176,12 @@ func (g *generator) generateHead() []html.Tag {
 	for _, class := range css {
 		switch true {
 		case strings.HasPrefix(class, "spacing"):
+			part := strings.Split(class, "-")
+			if len(part) != 3 {
+				continue
+			}
+			style += generateSpacing(part[1])
+		case strings.HasPrefix(class, "width"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
 				continue
