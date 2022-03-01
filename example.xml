@@ -1,21 +1,21 @@
 <layout>
-	<row spacing="100" bg-color="pink">
-		<column spacing="35">
+	<row width="fill" spacing="100" bg-color="pink">
+		<column width="px:200" spacing="35">
 			<el>hello world!</el>
 			<el>hello world!</el>
 			<el>hello world!</el>
 		</column>
-		<column spacing="10">
+		<column width="portion:2" spacing="10">
 			<el>hello world!</el>
 			<el>hello world!</el>
 			<el>hello world!</el>
 		</column>
-		<column spacing="10" bg-color="red">
+		<column width="portion:5" spacing="10" bg-color="red">
 			<el>hello world!</el>
 			<el bg-color="blue" font-color="white">hello world!</el>
 			<el>hello world!</el>
 		</column>
-		<column spacing="100">
+		<column width="px:200" spacing="100">
 			<el>hello world! 123</el>
 			<el>hello world! 123</el>
 			<el>hello world! 123</el>
