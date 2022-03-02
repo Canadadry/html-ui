@@ -10,6 +10,7 @@ var (
 	errInvalideTypeFound         = fmt.Errorf("el with an invalid type found")
 	errInvalidImageType          = fmt.Errorf("invalid image found")
 	errInvalidTextType           = fmt.Errorf("invalid text found")
+	errInvalidChildText          = fmt.Errorf("invalid child found : text should should be placed in el")
 	errShouldNotHaveChildren     = fmt.Errorf("should not have children")
 )
 
@@ -31,11 +32,11 @@ func Validate(el El) error {
 	case TypeElRow:
 		return validate(el.Children[0])
 	case TypeElText:
-		return validateText(el.Children[0])
+		return errInvalidChildText
 	case TypeElEl:
 		return validate(el.Children[0])
 	}
-	return nil
+	return fmt.Errorf("%w : '%s'", errInvalideTypeFound, el.Children[0].Type)
 }
 
 func validate(el El) error {
@@ -49,9 +50,14 @@ func validate(el El) error {
 		case TypeElRow:
 			err = validate(c)
 		case TypeElText:
+			if el.Type != TypeElEl {
+				return errInvalidChildText
+			}
 			err = validateText(c)
 		case TypeElEl:
 			return validate(c)
+		default:
+			err = fmt.Errorf("%w : '%s'", errInvalideTypeFound, c.Type)
 		}
 		if err != nil {
 			return err

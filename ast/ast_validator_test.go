@@ -15,11 +15,16 @@ func TestValidateSuccess(t *testing.T) {
 					{
 						Type: TypeElColumn,
 						Children: []El{
-							El{
+							{
 								Type: TypeElImage,
 							},
-							El{
-								Type: TypeElText,
+							{
+								Type: TypeElEl,
+								Children: []El{
+									{
+										Type: TypeElText,
+									},
+								},
 							},
 						},
 					},
@@ -56,6 +61,20 @@ func TestValidateError(t *testing.T) {
 			in:  El{Type: TypeElLayout, Children: []El{El{}}},
 			exp: "el with an invalid type found : ''",
 		},
+		31: {
+			in: El{Type: TypeElLayout, Children: []El{
+				El{Type: ElType("fake1")},
+			}},
+			exp: "el with an invalid type found : 'fake1'",
+		},
+		32: {
+			in: El{Type: TypeElLayout, Children: []El{
+				El{Type: TypeElColumn, Children: []El{
+					El{Type: ElType("fake2")},
+				}},
+			}},
+			exp: "el with an invalid type found : 'fake2'",
+		},
 		4: {
 			in: El{Type: TypeElLayout, Children: []El{
 				El{Type: TypeElImage, Children: []El{El{}}},
@@ -69,6 +88,14 @@ func TestValidateError(t *testing.T) {
 				}},
 			}},
 			exp: "invalid image found : should not have children",
+		},
+		51: {
+			in: El{Type: TypeElLayout, Children: []El{
+				El{Type: TypeElColumn, Children: []El{
+					El{Type: TypeElText, Children: []El{El{}}},
+				}},
+			}},
+			exp: "invalid child found : text should should be placed in el",
 		},
 		6: {
 			in: El{Type: TypeElLayout, Children: []El{
