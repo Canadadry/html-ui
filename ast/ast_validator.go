@@ -24,6 +24,10 @@ func Validate(el El) error {
 	if el.Children[0].Type == "" {
 		return fmt.Errorf("%w : '%s'", errInvalideTypeFound, el.Children[0].Type)
 	}
+	err := validateAttribute(el)
+	if err != nil {
+		return err
+	}
 	switch el.Children[0].Type {
 	case TypeElImage:
 		return validateImage(el.Children[0])
@@ -40,6 +44,10 @@ func Validate(el El) error {
 }
 
 func validate(el El) error {
+	err := validateAttribute(el)
+	if err != nil {
+		return err
+	}
 	for _, c := range el.Children {
 		var err error
 		switch c.Type {
