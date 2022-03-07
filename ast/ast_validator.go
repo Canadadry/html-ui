@@ -75,6 +75,10 @@ func validate(el El) error {
 }
 
 func validateImage(el El) error {
+	err := validateAttribute(el)
+	if err != nil {
+		return err
+	}
 	if len(el.Children) != 0 {
 		return fmt.Errorf("%v : %v", errInvalidImageType, errShouldNotHaveChildren)
 	}
@@ -82,6 +86,10 @@ func validateImage(el El) error {
 }
 
 func validateText(el El) error {
+	err := validateAttribute(el)
+	if err != nil {
+		return err
+	}
 	if len(el.Children) != 0 {
 		return fmt.Errorf("%v : %v", errInvalidTextType, errShouldNotHaveChildren)
 	}

@@ -72,10 +72,46 @@ func TestValidateAttributeError(t *testing.T) {
 		1: {
 			in: buildElWidthAttr(
 				TypeElLayout,
-				[]AttrType{TypeAttrWidth},
+				[]AttrType{},
 				buildElWidthAttr(TypeElColumn, []AttrType{"fake"}),
 			),
-			exp: "layout cannot have attribute 'width' possibilities are []",
+			exp: "column cannot have attribute 'fake' possibilities are [align bg-color border-color border-rounded border-width font-color font-size height padding spacing width]",
+		},
+		2: {
+			in: buildElWidthAttr(
+				TypeElLayout,
+				[]AttrType{},
+				buildElWidthAttr(TypeElRow, []AttrType{"fake"}),
+			),
+			exp: "row cannot have attribute 'fake' possibilities are [align bg-color border-color border-rounded border-width font-color font-size height padding spacing width]",
+		},
+		3: {
+			in: buildElWidthAttr(
+				TypeElLayout,
+				[]AttrType{},
+				buildElWidthAttr(TypeElEl, []AttrType{"fake"}),
+			),
+			exp: "el cannot have attribute 'fake' possibilities are [align bg-color border-color border-rounded border-width font-color font-size height padding spacing width]",
+		},
+		4: {
+			in: buildElWidthAttr(
+				TypeElLayout,
+				[]AttrType{},
+				buildElWidthAttr(TypeElRow, []AttrType{},
+					buildElWidthAttr(TypeElImage, []AttrType{"fake"}),
+				),
+			),
+			exp: "img cannot have attribute 'fake' possibilities are [alt src]",
+		},
+		5: {
+			in: buildElWidthAttr(
+				TypeElLayout,
+				[]AttrType{},
+				buildElWidthAttr(TypeElEl, []AttrType{},
+					buildElWidthAttr(TypeElText, []AttrType{"fake"}),
+				),
+			),
+			exp: "text cannot have attribute 'fake' possibilities are []",
 		},
 	}
 

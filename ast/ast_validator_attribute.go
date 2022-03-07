@@ -6,28 +6,67 @@ import (
 )
 
 func validateAttribute(el El) error {
-	switch el.Type {
-	case TypeElLayout:
-		return validateAttributeField(el.Attr, map[AttrType]struct{}{})
-	case TypeElImage:
-		return validateAttributeField(el.Attr, map[AttrType]struct{}{})
-	case TypeElColumn:
-		return validateAttributeField(el.Attr, map[AttrType]struct{}{})
-	case TypeElRow:
-		return validateAttributeField(el.Attr, map[AttrType]struct{}{})
-	case TypeElText:
-		return validateAttributeField(el.Attr, map[AttrType]struct{}{})
-	case TypeElEl:
-		return validateAttributeField(el.Attr, map[AttrType]struct{}{})
+	validationCtx := map[ElType]map[AttrType]struct{}{
+		TypeElLayout: map[AttrType]struct{}{},
+		TypeElImage: map[AttrType]struct{}{
+			TypeAttrSrc: {},
+			TypeAttrAlt: {},
+		},
+		TypeElColumn: map[AttrType]struct{}{
+			TypeAttrWidth:         {},
+			TypeAttrHeight:        {},
+			TypeAttrAlign:         {},
+			TypeAttrSpacing:       {},
+			TypeAttrPadding:       {},
+			TypeAttrBgColor:       {},
+			TypeAttrFontColor:     {},
+			TypeAttrFontSize:      {},
+			TypeAttrBorderRounded: {},
+			TypeAttrBorderColor:   {},
+			TypeAttrBorderWidth:   {},
+		},
+		TypeElRow: map[AttrType]struct{}{
+			TypeAttrWidth:         {},
+			TypeAttrHeight:        {},
+			TypeAttrAlign:         {},
+			TypeAttrSpacing:       {},
+			TypeAttrPadding:       {},
+			TypeAttrBgColor:       {},
+			TypeAttrFontColor:     {},
+			TypeAttrFontSize:      {},
+			TypeAttrBorderRounded: {},
+			TypeAttrBorderColor:   {},
+			TypeAttrBorderWidth:   {},
+		},
+		TypeElText: map[AttrType]struct{}{},
+		TypeElEl: map[AttrType]struct{}{
+			TypeAttrWidth:         {},
+			TypeAttrHeight:        {},
+			TypeAttrAlign:         {},
+			TypeAttrSpacing:       {},
+			TypeAttrPadding:       {},
+			TypeAttrBgColor:       {},
+			TypeAttrFontColor:     {},
+			TypeAttrFontSize:      {},
+			TypeAttrBorderRounded: {},
+			TypeAttrBorderColor:   {},
+			TypeAttrBorderWidth:   {},
+		},
 	}
-	return nil
+
+	ctx, ok := validationCtx[el.Type]
+	if !ok {
+		return nil
+	}
+	return validateAttributeField(el.Type, el.Attr, ctx)
+
 }
 
-func validateAttributeField(attrs []Attribute, legal map[AttrType]struct{}) error {
+func validateAttributeField(elType ElType, attrs []Attribute, legal map[AttrType]struct{}) error {
 	for _, attr := range attrs {
 		_, ok := legal[attr.Type]
 		if !ok {
-			return fmt.Errorf("layout cannot have attribute '%s' possibilities are %v", attr.Type, mapAttrTypeToString(legal))
+			return fmt.Errorf("%s cannot have attribute '%s' possibilities are %v", elType, attr.Type, mapAttrTypeToString(legal))
 		}
 	}
 	return nil
