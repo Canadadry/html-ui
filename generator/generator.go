@@ -5,8 +5,6 @@ import (
 	"app/pkg/html"
 	"fmt"
 	"io"
-	"sort"
-	"strings"
 )
 
 func Generate(el ast.El, w io.Writer) error {
@@ -30,7 +28,7 @@ const (
 )
 
 type generator struct {
-	css  map[string]struct{}
+	css  UniqueClasses
 	mode mode
 }
 
@@ -63,13 +61,7 @@ func (g *generator) generateLayout(el ast.El) html.Tag {
 }
 
 func (g *generator) generateColumn(el ast.El) html.Tag {
-	base := map[string]struct{}{
-		"s":  {},
-		"c":  {},
-		"ct": {},
-		"cl": {},
-	}
-	classes := g.parseAttribute(el.Attr, base)
+	classes := g.parseAttribute(el.Attr, UniqueClassesFrom("s c ct cl"))
 	g.mode = modeColumn
 	return html.Div(
 		html.Attributes{html.AttributeClass: classes},
@@ -78,13 +70,7 @@ func (g *generator) generateColumn(el ast.El) html.Tag {
 }
 
 func (g *generator) generateRow(el ast.El) html.Tag {
-	base := map[string]struct{}{
-		"s":   {},
-		"r":   {},
-		"cl":  {},
-		"ccy": {},
-	}
-	classes := g.parseAttribute(el.Attr, base)
+	classes := g.parseAttribute(el.Attr, UniqueClassesFrom("s r cl ccy"))
 	g.mode = modeColumn
 	return html.Div(
 		html.Attributes{html.AttributeClass: classes},
@@ -92,7 +78,7 @@ func (g *generator) generateRow(el ast.El) html.Tag {
 	)
 }
 
-func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct{}) string {
+func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) string {
 	hasWidthAttr := false
 	hasHeightAttr := false
 	for _, attr := range attrs {
@@ -119,10 +105,10 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 			switch attr.Size.Type() {
 			case ast.SizePxType:
 				class = fmt.Sprintf("width-px-%d", attr.Size.Get())
-				base["we"] = struct{}{}
+				base.Add("we")
 			case ast.SizePortionType:
 				class = fmt.Sprintf("width-fill-%d", attr.Size.Get())
-				base["wfp"] = struct{}{}
+				base.Add("wfp")
 			case ast.SizeFillType:
 				class = "wf"
 			}
@@ -131,67 +117,58 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 			switch attr.Size.Type() {
 			case ast.SizePxType:
 				class = fmt.Sprintf("height-px-%d", attr.Size.Get())
-				base["he"] = struct{}{}
+				base.Add("he")
 			case ast.SizePortionType:
 				class = fmt.Sprintf("height-fill-%d", attr.Size.Get())
-				base["hfp"] = struct{}{}
+				base.Add("hfp")
 			case ast.SizeFillType:
 				class = "hf"
 			}
 		case ast.TypeAttrAlign:
 			switch attr.AlignX {
 			case "left":
-				base["av"] = struct{}{}
-				base["al"] = struct{}{}
+				base.Add("av")
+				base.Add("al")
 			case "right":
-				base["av"] = struct{}{}
-				base["ar"] = struct{}{}
+				base.Add("av")
+				base.Add("ar")
 			case "centerX":
-				base["av"] = struct{}{}
-				base["cx"] = struct{}{}
+				base.Add("av")
+				base.Add("cx")
 			}
 			switch attr.AlignY {
 			case "top":
-				base["ah"] = struct{}{}
-				base["at"] = struct{}{}
+				base.Add("ah")
+				base.Add("at")
 			case "bottom":
-				base["ah"] = struct{}{}
-				base["ab"] = struct{}{}
+				base.Add("ah")
+				base.Add("ab")
 			case "centerY":
-				base["ah"] = struct{}{}
-				base["cy"] = struct{}{}
+				base.Add("ah")
+				base.Add("cy")
 			}
 		default:
 			continue
 		}
 		if class != "" {
-			base[class] = struct{}{}
-			g.css[class] = struct{}{}
+			base.Add(class)
+			g.css.Add(class)
 		}
 	}
 	if !hasWidthAttr {
-		base["wc"] = struct{}{}
+		base.Add("wc")
 	}
 	if !hasHeightAttr {
-		base["hc"] = struct{}{}
+		base.Add("hc")
 	}
-	classes := make([]string, 0, len(base))
-	for c := range base {
-		classes = append(classes, c)
-	}
-	sort.Strings(classes)
-	return strings.Join(classes, " ")
+	return base.String()
 }
 
 func (g *generator) generateEl(el ast.El) html.Tag {
 	if len(el.Children) > 0 && el.Children[0].Type == ast.TypeElText {
 		return g.generateElText(el)
 	}
-	base := map[string]struct{}{
-		"s": {},
-		"e": {},
-	}
-	classes := g.parseAttribute(el.Attr, base)
+	classes := g.parseAttribute(el.Attr, UniqueClassesFrom("s e"))
 	g.mode = modeNormal
 	tag := html.Div(
 		html.Attributes{html.AttributeClass: classes},
@@ -207,11 +184,7 @@ func (g *generator) generateElText(el ast.El) html.Tag {
 	if len(el.Attr) == 0 {
 		return g.generateText(el.Children[0].Content)
 	}
-	base := map[string]struct{}{
-		"s": {},
-		"e": {},
-	}
-	classes := g.parseAttribute(el.Attr, base)
+	classes := g.parseAttribute(el.Attr, UniqueClassesFrom("s e"))
 	g.mode = modeNormal
 	return html.Div(
 		html.Attributes{html.AttributeClass: classes},
@@ -230,22 +203,21 @@ func (g *generator) generateImage(el ast.El) html.Tag {
 			alt = attr.Value
 		}
 	}
-	divClasses := g.parseAttribute(el.Attr, map[string]struct{}{"s": {}, "e": {}, "ic": {}})
-	divClasses = strings.ReplaceAll(divClasses, "hc ", "")
-	divClasses = strings.ReplaceAll(divClasses, "wc ", "")
-	divClasses = strings.ReplaceAll(divClasses, " wc", "")
-	if strings.Contains(divClasses, "he") {
-		divClasses = strings.ReplaceAll(divClasses, "ic", "i")
+	divClasses := UniqueClassesFrom(g.parseAttribute(el.Attr, UniqueClassesFrom("s e ic")))
+	divClasses.Remove("hc")
+	divClasses.Remove("wc")
+	if divClasses.Has("he") {
+		divClasses.Remove("ic")
+		divClasses.Add("i")
 	}
-	imgClasses := g.parseAttribute(el.Attr, map[string]struct{}{"s": {}, "e": {}})
-	imgClasses = strings.ReplaceAll(imgClasses, "hc ", "")
-	imgClasses = strings.ReplaceAll(imgClasses, "wc ", "")
-	imgClasses = strings.ReplaceAll(imgClasses, " wc", "")
+	imgClasses := UniqueClassesFrom(g.parseAttribute(el.Attr, UniqueClassesFrom("s e")))
+	imgClasses.Remove("hc")
+	imgClasses.Remove("wc")
 	return html.Div(
-		html.Attributes{html.AttributeClass: divClasses},
+		html.Attributes{html.AttributeClass: divClasses.String()},
 		html.Img(
 			html.Attributes{
-				html.AttributeClass: imgClasses,
+				html.AttributeClass: imgClasses.String(),
 				html.AttributeSrc:   src,
 				html.AttributeAlt:   alt,
 			},
