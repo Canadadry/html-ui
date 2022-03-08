@@ -2,6 +2,7 @@ package ast
 
 import (
 	"fmt"
+	"image/color"
 	"io"
 )
 
@@ -40,8 +41,46 @@ var ValidAttrType = map[AttrType]struct{}{
 }
 
 type Attribute struct {
-	Type  AttrType
-	Value string
+	Type   AttrType
+	Value  string
+	Number int
+	Color  color.RGBA
+	Size   AttrSize
+	AlignX AlignXType
+	AlignY AlignYType
+}
+
+func (att *Attribute) Parse() error {
+	var err error
+	switch att.Type {
+	case TypeAttrWidth:
+		att.Size, err = ParseSizeAttr(att.Value)
+	case TypeAttrHeight:
+		att.Size, err = ParseSizeAttr(att.Value)
+	case TypeAttrAlign:
+		att.AlignX, att.AlignY, err = ParseAlignAttr(att.Value)
+	case TypeAttrSpacing:
+		att.Number, err = ParseNumberAttr(att.Value)
+	case TypeAttrPadding:
+		att.Number, err = ParseNumberAttr(att.Value)
+	case TypeAttrBgColor:
+		att.Color, err = ParseColorAttr(att.Value)
+	case TypeAttrFontColor:
+		att.Color, err = ParseColorAttr(att.Value)
+	case TypeAttrFontSize:
+		att.Number, err = ParseNumberAttr(att.Value)
+	case TypeAttrBorderRounded:
+		att.Number, err = ParseNumberAttr(att.Value)
+	case TypeAttrBorderColor:
+		att.Color, err = ParseColorAttr(att.Value)
+	case TypeAttrBorderWidth:
+		att.Number, err = ParseNumberAttr(att.Value)
+	case TypeAttrSrc:
+	case TypeAttrAlt:
+	default:
+		err = fmt.Errorf("unhandled case type %s", att.Type)
+	}
+	return err
 }
 
 func (att Attribute) Xml(w io.Writer) error {
