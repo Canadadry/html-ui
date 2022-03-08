@@ -2,7 +2,6 @@ package generator
 
 import (
 	"app/ast"
-	"app/pkg/colors"
 	"app/pkg/html"
 	"fmt"
 	"io"
@@ -111,50 +110,34 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base map[string]struct
 		case ast.TypeAttrPadding:
 			class = fmt.Sprintf("p-%s", attr.Value)
 		case ast.TypeAttrBgColor:
-			c, err := colors.FromString(attr.Value)
-			if err != nil {
-				continue
-			}
-			class = fmt.Sprintf("bg-%d-%d-%d-255", c.R, c.G, c.B)
+			class = fmt.Sprintf("bg-%d-%d-%d-255", attr.Color.R, attr.Color.G, attr.Color.B)
 		case ast.TypeAttrFontColor:
-			c, err := colors.FromString(attr.Value)
-			if err != nil {
-				continue
-			}
-			class = fmt.Sprintf("fc-%d-%d-%d-255", c.R, c.G, c.B)
+			class = fmt.Sprintf("fc-%d-%d-%d-255", attr.Color.R, attr.Color.G, attr.Color.B)
 		case ast.TypeAttrBorderColor:
-			c, err := colors.FromString(attr.Value)
-			if err != nil {
-				continue
-			}
-			class = fmt.Sprintf("bc-%d-%d-%d-255", c.R, c.G, c.B)
+			class = fmt.Sprintf("bc-%d-%d-%d-255", attr.Color.R, attr.Color.G, attr.Color.B)
 		case ast.TypeAttrWidth:
-			var err error
-			var sup string
-			class, sup, err = parseWidthAttr(attr.Value)
-			if err != nil {
-				continue
-			}
 			hasWidthAttr = true
-			if class == "width-fill" {
+			switch attr.Size.Type() {
+			case ast.SizePxType:
+				class = fmt.Sprintf("width-px-%d", attr.Size.Get())
+				base["we"] = struct{}{}
+			case ast.SizePortionType:
+				class = fmt.Sprintf("width-fill-%d", attr.Size.Get())
+				base["wfp"] = struct{}{}
+			case ast.SizeFillType:
 				class = "wf"
 			}
-			if sup != "" {
-				base[sup] = struct{}{}
-			}
 		case ast.TypeAttrHeight:
-			var err error
-			var sup string
-			class, sup, err = parseHeightAttr(attr.Value)
-			if err != nil {
-				continue
-			}
 			hasHeightAttr = true
-			if class == "height-fill" {
+			switch attr.Size.Type() {
+			case ast.SizePxType:
+				class = fmt.Sprintf("height-px-%d", attr.Size.Get())
+				base["he"] = struct{}{}
+			case ast.SizePortionType:
+				class = fmt.Sprintf("height-fill-%d", attr.Size.Get())
+				base["hfp"] = struct{}{}
+			case ast.SizeFillType:
 				class = "hf"
-			}
-			if sup != "" {
-				base[sup] = struct{}{}
 			}
 		case ast.TypeAttrAlign:
 			alignClasses := parseAlignAttr(attr.Value)
@@ -204,30 +187,6 @@ func parseAlignAttr(align string) []string {
 		}
 	}
 	return out
-}
-
-func parseWidthAttr(width string) (string, string, error) {
-	if strings.HasPrefix(width, "px:") {
-		num, err := strconv.ParseInt(width[3:], 10, 64)
-		return fmt.Sprintf("width-px-%d", num), "we", err
-	}
-	if strings.HasPrefix(width, "portion:") {
-		num, err := strconv.ParseInt(width[8:], 10, 64)
-		return fmt.Sprintf("width-fill-%d", num), "wfp", err
-	}
-	return "width-fill", "", nil
-}
-
-func parseHeightAttr(width string) (string, string, error) {
-	if strings.HasPrefix(width, "px:") {
-		num, err := strconv.ParseInt(width[3:], 10, 64)
-		return fmt.Sprintf("height-px-%d", num), "he", err
-	}
-	if strings.HasPrefix(width, "portion:") {
-		num, err := strconv.ParseInt(width[8:], 10, 64)
-		return fmt.Sprintf("height-fill-%d", num), "hfp", err
-	}
-	return "height-fill", "", nil
 }
 
 func (g *generator) generateEl(el ast.El) html.Tag {
