@@ -15,7 +15,7 @@ func TestParser(t *testing.T) {
 		<el bg-color="rgb(240,0,245)" font-color="rgb(255,255,255)" border-rounded="3" padding="30">
 			stylish!
 		</el>
-		<el align="Right">
+		<el align="right">
 			<el bg-color="rgb(240,0,245)" font-color="rgb(255,255,255)" border-rounded="3" padding="30">
 				stylish!
 			</el>

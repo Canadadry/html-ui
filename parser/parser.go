@@ -76,7 +76,12 @@ func parseAttributes(se xml.StartElement) ([]ast.Attribute, error) {
 		if !ok {
 			return nil, fmt.Errorf("expected to got a Valid Attr Type got a '%s', possible values are %v", attr.Name.Local, ast.ValidAttrType)
 		}
-		attrs = append(attrs, ast.Attribute{Type: ast.AttrType(attr.Name.Local), Value: attr.Value})
+		att := ast.Attribute{Type: ast.AttrType(attr.Name.Local), Value: attr.Value}
+		err := att.Parse()
+		if err != nil {
+			return nil, err
+		}
+		attrs = append(attrs, att)
 	}
 	return attrs, nil
 }
