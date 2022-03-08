@@ -3,12 +3,11 @@ package generator
 import (
 	"app/pkg/html"
 	"fmt"
-	"sort"
 	"strconv"
 	"strings"
 )
 
-func generateHead(cssClasses map[string]struct{}) []html.Tag {
+func generateHead(cssClasses UniqueClasses) []html.Tag {
 	out := []html.Tag{
 		html.Link(html.Attributes{
 			html.AttributeHref: "public/base.css",
@@ -17,12 +16,7 @@ func generateHead(cssClasses map[string]struct{}) []html.Tag {
 		}),
 	}
 
-	css := make([]string, 0, len(cssClasses))
-	for class := range cssClasses {
-		css = append(css, class)
-	}
-	sort.Strings(css)
-
+	css := cssClasses.Sorted()
 	style := ""
 
 	for _, class := range css {
