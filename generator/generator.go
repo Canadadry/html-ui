@@ -7,7 +7,7 @@ import (
 	"io"
 )
 
-func Generate(el ast.El, w io.Writer) error {
+func Generate(w io.Writer, el ast.El) error {
 	gen := generator{
 		css: map[string]struct{}{},
 	}

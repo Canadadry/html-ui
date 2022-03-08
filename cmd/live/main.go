@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/ast"
 	"app/generator"
 	"app/parser"
 	"app/pkg/router"
@@ -47,10 +48,14 @@ func handler(in string) func(w http.ResponseWriter, r *http.Request) error {
 		defer fIn.Close()
 
 		p := parser.Parser{}
-		ast, err := p.Parse(fIn)
+		root, err := p.Parse(fIn)
 		if err != nil {
 			return err
 		}
-		return generator.Generate(ast, w)
+		err = ast.Validate(root)
+		if err != nil {
+			return err
+		}
+		return generator.Generate(w, root)
 	}
 }

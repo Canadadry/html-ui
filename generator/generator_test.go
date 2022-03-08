@@ -41,7 +41,7 @@ func TestGenerate(t *testing.T) {
 			t.Fatalf("[%s] failed %v", tt, err)
 		}
 		result := bytes.Buffer{}
-		err = Generate(ast, &result)
+		err = Generate(&result, ast)
 		if err != nil {
 			t.Fatalf("[%s] failed %v", tt, err)
 		}

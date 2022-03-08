@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/ast"
 	"app/generator"
 	"app/parser"
 	"flag"
@@ -36,10 +37,13 @@ func run() error {
 	defer fIn.Close()
 
 	p := parser.Parser{}
-	ast, err := p.Parse(fIn)
+	root, err := p.Parse(fIn)
 	if err != nil {
 		return err
 	}
-
-	return generator.Generate(ast, fOut)
+	err = ast.Validate(root)
+	if err != nil {
+		return err
+	}
+	return generator.Generate(fOut, root)
 }
