@@ -15,7 +15,10 @@ func Generate(w io.Writer, el ast.El) error {
 	if err != nil {
 		return err
 	}
-	head := generateHead(gen.css)
+	head, err := generateHead(gen.css)
+	if err != nil {
+		return err
+	}
 	d := html.Document{
 		Head: head,
 		Body: body,
