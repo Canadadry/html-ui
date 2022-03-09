@@ -57,6 +57,8 @@ func validate(el El) error {
 			err = validate(c)
 		case TypeElRow:
 			err = validate(c)
+		case TypeElButton:
+			err = validate(c)
 		case TypeElText:
 			if el.Type != TypeElEl {
 				return errInvalidChildText

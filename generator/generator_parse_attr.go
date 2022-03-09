@@ -15,6 +15,10 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) (s
 			continue
 		case ast.TypeAttrAlt:
 			continue
+		case ast.TypeAttrName:
+			continue
+		case ast.TypeAttrValue:
+			continue
 		case ast.TypeAttrSpacing:
 			class = fmt.Sprintf("spacing-%s-%s", attr.Value, attr.Value)
 		case ast.TypeAttrFontSize:
@@ -27,6 +31,8 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) (s
 			class = fmt.Sprintf("p-%s", attr.Value)
 		case ast.TypeAttrBgColor:
 			class = fmt.Sprintf("bg-%d-%d-%d-255", attr.Color.R, attr.Color.G, attr.Color.B)
+		case ast.TypeAttrFocusBgColor:
+			class = fmt.Sprintf("bg-%d-%d-%d-255-fs", attr.Color.R, attr.Color.G, attr.Color.B)
 		case ast.TypeAttrFontColor:
 			class = fmt.Sprintf("fc-%d-%d-%d-255", attr.Color.R, attr.Color.G, attr.Color.B)
 		case ast.TypeAttrBorderColor:

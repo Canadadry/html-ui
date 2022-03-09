@@ -16,6 +16,7 @@ const (
 	TypeElColumn        = "column"
 	TypeElLayout        = "layout"
 	TypeElImage         = "img"
+	TypeElButton        = "button"
 )
 
 var ValidElType = map[ElType]struct{}{
@@ -25,6 +26,7 @@ var ValidElType = map[ElType]struct{}{
 	TypeElColumn: {},
 	TypeElLayout: {},
 	TypeElImage:  {},
+	TypeElButton: {},
 }
 
 type El struct {

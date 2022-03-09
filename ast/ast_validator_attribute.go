@@ -41,6 +41,22 @@ func validateAttribute(el El) error {
 			TypeAttrBorderWidth:   {},
 		},
 		TypeElText: map[AttrType]struct{}{},
+		TypeElButton: map[AttrType]struct{}{
+			TypeAttrWidth:         {},
+			TypeAttrHeight:        {},
+			TypeAttrAlign:         {},
+			TypeAttrSpacing:       {},
+			TypeAttrPadding:       {},
+			TypeAttrBgColor:       {},
+			TypeAttrFocusBgColor:  {},
+			TypeAttrFontColor:     {},
+			TypeAttrFontSize:      {},
+			TypeAttrBorderRounded: {},
+			TypeAttrBorderColor:   {},
+			TypeAttrBorderWidth:   {},
+			TypeAttrName:          {},
+			TypeAttrValue:         {},
+		},
 		TypeElEl: map[AttrType]struct{}{
 			TypeAttrWidth:         {},
 			TypeAttrHeight:        {},
@@ -58,7 +74,7 @@ func validateAttribute(el El) error {
 
 	ctx, ok := validationCtx[el.Type]
 	if !ok {
-		return fmt.Errorf("cannot validate attributes of unknown type '%s'", el.Type)
+		return fmt.Errorf("cannot validate attribute type of unknown type '%s'", el.Type)
 	}
 	return validateAttributeField(el.Type, el.Attr, ctx)
 

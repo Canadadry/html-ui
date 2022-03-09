@@ -78,7 +78,7 @@ func generateHead(cssClasses UniqueClasses) ([]html.Tag, error) {
 			}
 			style += generateHeight(kind, value)
 		case strings.HasPrefix(class, "bg-") && strings.HasSuffix(class, "-255"):
-			r, g, b, err := parseBgClass(class)
+			r, g, b, err := parseBgClass(class, 3, 4)
 			if err != nil {
 				return nil, fmt.Errorf("invalid bg css class : %w", err)
 			}
@@ -86,7 +86,7 @@ func generateHead(cssClasses UniqueClasses) ([]html.Tag, error) {
   background-color: rgba(%d,%d,%d,1);
 }`, class, r, g, b)
 		case strings.HasPrefix(class, "fc-") && strings.HasSuffix(class, "-255"):
-			r, g, b, err := parseBgClass(class)
+			r, g, b, err := parseBgClass(class, 3, 4)
 			if err != nil {
 				return nil, fmt.Errorf("invalid cf css class : %w", err)
 			}
@@ -94,13 +94,27 @@ func generateHead(cssClasses UniqueClasses) ([]html.Tag, error) {
   color: rgba(%d,%d,%d,1);
 }`, class, r, g, b)
 		case strings.HasPrefix(class, "bc-") && strings.HasSuffix(class, "-255"):
-			r, g, b, err := parseBgClass(class)
+			r, g, b, err := parseBgClass(class, 3, 4)
 			if err != nil {
 				return nil, fmt.Errorf("invalid bg css class : %w", err)
 			}
 			style += fmt.Sprintf(`.%s{
   border-color: rgba(%d,%d,%d,1);
 }`, class, r, g, b)
+		case strings.HasPrefix(class, "bg-") && strings.HasSuffix(class, "-255-fs"):
+			r, g, b, err := parseBgClass(class, 3, 7)
+			if err != nil {
+				return nil, fmt.Errorf("invalid bg css class : %w", err)
+			}
+			style += fmt.Sprintf(`.%s:focus {
+  background-color: rgba(%d,%d,%d,1);
+}.s:focus .%s  {
+  background-color: rgba(%d,%d,%d,1);
+}.%s:focus-within {
+  background-color: rgba(%d,%d,%d,1);
+}.ui-slide-bar:focus + .s .focusable-thumb.%s {
+  background-color: rgba(%d,%d,%d,1);
+}`, class, r, g, b, class, r, g, b, class, r, g, b, class, r, g, b)
 		default:
 			return nil, fmt.Errorf("cannot generate css class for  %s", class)
 		}
@@ -139,8 +153,8 @@ func generateHeight(kind string, value int64) string {
 	return ""
 }
 
-func parseBgClass(attribute string) (uint64, uint64, uint64, error) {
-	colorAttr := attribute[3 : len(attribute)-4]
+func parseBgClass(attribute string, prefixSize, suffixSize int) (uint64, uint64, uint64, error) {
+	colorAttr := attribute[prefixSize : len(attribute)-suffixSize]
 	colorPart := strings.Split(colorAttr, "-")
 	if len(colorPart) != 3 {
 		return 0, 0, 0, fmt.Errorf("invalid number of arg provider expected 3 got %d in %s", len(colorPart), colorAttr)

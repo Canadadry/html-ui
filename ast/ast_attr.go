@@ -15,6 +15,7 @@ const (
 	TypeAttrSpacing                = "spacing"
 	TypeAttrPadding                = "padding"
 	TypeAttrBgColor                = "bg-color"
+	TypeAttrFocusBgColor           = "focus-bg-color"
 	TypeAttrFontColor              = "font-color"
 	TypeAttrFontSize               = "font-size"
 	TypeAttrBorderRounded          = "border-rounded"
@@ -22,6 +23,8 @@ const (
 	TypeAttrBorderWidth            = "border-width"
 	TypeAttrSrc                    = "src"
 	TypeAttrAlt                    = "alt"
+	TypeAttrName                   = "name"
+	TypeAttrValue                  = "value"
 )
 
 var ValidAttrType = map[AttrType]struct{}{
@@ -31,6 +34,7 @@ var ValidAttrType = map[AttrType]struct{}{
 	TypeAttrSpacing:       {},
 	TypeAttrPadding:       {},
 	TypeAttrBgColor:       {},
+	TypeAttrFocusBgColor:  {},
 	TypeAttrFontColor:     {},
 	TypeAttrFontSize:      {},
 	TypeAttrBorderWidth:   {},
@@ -38,6 +42,8 @@ var ValidAttrType = map[AttrType]struct{}{
 	TypeAttrBorderRounded: {},
 	TypeAttrSrc:           {},
 	TypeAttrAlt:           {},
+	TypeAttrName:          {},
+	TypeAttrValue:         {},
 }
 
 type Attribute struct {
@@ -65,6 +71,8 @@ func (att *Attribute) Parse() error {
 		att.Number, err = ParseNumberAttr(att.Value)
 	case TypeAttrBgColor:
 		att.Color, err = ParseColorAttr(att.Value)
+	case TypeAttrFocusBgColor:
+		att.Color, err = ParseColorAttr(att.Value)
 	case TypeAttrFontColor:
 		att.Color, err = ParseColorAttr(att.Value)
 	case TypeAttrFontSize:
@@ -77,8 +85,10 @@ func (att *Attribute) Parse() error {
 		att.Number, err = ParseNumberAttr(att.Value)
 	case TypeAttrSrc:
 	case TypeAttrAlt:
+	case TypeAttrName:
+	case TypeAttrValue:
 	default:
-		err = fmt.Errorf("unhandled case type %s", att.Type)
+		err = fmt.Errorf("cannot parse unknown attr type %s", att.Type)
 	}
 	return err
 }

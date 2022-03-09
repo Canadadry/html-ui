@@ -17,8 +17,6 @@ myRowOfStuff =
         [ myElement "hello"
         , myElement "hello"
         , myButton Nothing
-        , myCbs (\b -> Nothing)
-        , myFields (\b -> Nothing)
         ]
 
 
@@ -44,79 +42,3 @@ myButton m =
         { onPress = m
         , label = myElement "My Button"
         }
-
-
-myCbs : (Bool -> msg) -> Element msg
-myCbs m =
-    column [ spacing 30 ]
-        [ Input.checkbox []
-            { onChange = m
-            , icon = Input.defaultCheckbox
-            , checked = True
-            , label =
-                Input.labelRight []
-                    (myElement "Do you want Guacamole? right")
-            }
-        , Input.checkbox []
-            { onChange = m
-            , icon = Input.defaultCheckbox
-            , checked = True
-            , label =
-                Input.labelLeft []
-                    (myElement "Do you want Guacamole? left ")
-            }
-        , Input.checkbox []
-            { onChange = m
-            , icon = Input.defaultCheckbox
-            , checked = True
-            , label =
-                Input.labelAbove []
-                    (myElement "Do you want Guacamole? above ")
-            }
-        , Input.checkbox []
-            { onChange = m
-            , icon = Input.defaultCheckbox
-            , checked = True
-            , label =
-                Input.labelBelow []
-                    (myElement "Do you want Guacamole? below ")
-            }
-        ]
-
-
-myFields : (String -> msg) -> Element msg
-myFields m =
-    column [ spacing 30 ]
-        [ Input.text []
-            { onChange = m
-            , text = ""
-            , placeholder = Just (Input.placeholder [] (myElement "placeholder"))
-            , label =
-                Input.labelRight []
-                    (text "Do you want Guacamole? right")
-            }
-        , Input.text []
-            { onChange = m
-            , text = "text"
-            , placeholder = Just (Input.placeholder [] (myElement "placeholder"))
-            , label =
-                Input.labelLeft []
-                    (text "Do you want Guacamole? left ")
-            }
-        , Input.text []
-            { onChange = m
-            , text = "text"
-            , placeholder = Just (Input.placeholder [] (myElement "placeholder"))
-            , label =
-                Input.labelAbove []
-                    (text "Do you want Guacamole? above ")
-            }
-        , Input.text []
-            { onChange = m
-            , text = "text"
-            , placeholder = Just (Input.placeholder [] (myElement "placeholder"))
-            , label =
-                Input.labelBelow []
-                    (text "Do you want Guacamole? below ")
-            }
-        ]

@@ -54,6 +54,8 @@ func (g *generator) generate(el []ast.El) ([]html.Tag, error) {
 			child, err = g.generateEl(item)
 		case ast.TypeElImage:
 			child, err = g.generateImage(item)
+		case ast.TypeElButton:
+			child, err = g.generateButton(item)
 		case ast.TypeElText:
 			child, err = g.generateText(item.Content)
 		default:
@@ -187,4 +189,30 @@ func (g *generator) generateText(txt string) (html.Tag, error) {
 	return html.Inline(html.Div(html.Attributes{html.AttributeClass: class},
 		html.Text(txt),
 	)), nil
+}
+
+func (g *generator) generateButton(el ast.El) (html.Tag, error) {
+	name := ""
+	value := ""
+	for _, attr := range el.Attr {
+		if attr.Type == ast.TypeAttrName {
+			name = attr.Value
+		}
+		if attr.Type == ast.TypeAttrValue {
+			value = attr.Value
+		}
+	}
+	classes, err := g.parseAttribute(el.Attr, UniqueClassesFrom("s e ccx ccy cptr hc notxt sbt"))
+	if err != nil {
+		return html.Tag{}, err
+	}
+	children, err := g.generate(el.Children)
+	return html.Button(
+		html.Attributes{
+			html.AttributeClass: classes,
+			html.AttributeName:  name,
+			html.AttributeValue: value,
+		},
+		children...,
+	), err
 }

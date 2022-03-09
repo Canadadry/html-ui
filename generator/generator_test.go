@@ -4,6 +4,7 @@ import (
 	"app/ast"
 	"app/parser"
 	"bytes"
+	// "github.com/sergi/go-diff/diffmatchpatch"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -65,7 +66,14 @@ func TestGenerate(t *testing.T) {
 		}
 
 		if result.String() != string(expected) {
+			// dmp := diffmatchpatch.New()
+			// diffs := dmp.DiffMain(result.String(), string(expected), false)
+			// if len(diffs) > 1 {
+			// 	t.Errorf("%#v", diffs)
+			// 	t.Fatalf("[%s] failed \n%v", tt, dmp.DiffPrettyText(diffs))
+			// } else {
 			t.Fatalf("[%s] failed \ngot \n-%s-\nexp \n-%s-\n", tt, result.String(), string(expected))
+			// }
 		}
 	}
 }
