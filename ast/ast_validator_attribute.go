@@ -58,7 +58,7 @@ func validateAttribute(el El) error {
 
 	ctx, ok := validationCtx[el.Type]
 	if !ok {
-		return nil
+		return fmt.Errorf("cannot validate attributes of unknown type '%s'", el.Type)
 	}
 	return validateAttributeField(el.Type, el.Attr, ctx)
 

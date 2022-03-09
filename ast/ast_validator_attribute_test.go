@@ -136,3 +136,10 @@ func TestValidateAttributeError(t *testing.T) {
 		}
 	}
 }
+
+func TestValidateAttribute(t *testing.T) {
+	err := validateAttribute(buildElWidthAttr(ElType("fake"), []AttrType{"fake"}))
+	if err == nil {
+		t.Fatalf("failed : exp '%s' got nil", "cannot validate attributes of unknown type 'fake'")
+	}
+}
