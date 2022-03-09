@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"app/ast"
 	"app/parser"
 	"bytes"
 	"io/ioutil"
@@ -27,6 +28,7 @@ func TestGenerate(t *testing.T) {
 		"test15",
 		"test16",
 		"test17",
+		"test18_part1",
 	}
 
 	for _, tt := range tests {
@@ -36,12 +38,17 @@ func TestGenerate(t *testing.T) {
 		}
 		defer fIn.Close()
 		p := parser.Parser{}
-		ast, err := p.Parse(fIn)
+		root, err := p.Parse(fIn)
 		if err != nil {
 			t.Fatalf("[%s] failed %v", tt, err)
 		}
+		err = ast.Validate(root)
+		if err != nil {
+			t.Fatalf("[%s] failed %v", tt, err)
+		}
+
 		result := bytes.Buffer{}
-		err = Generate(&result, ast)
+		err = Generate(&result, root)
 		if err != nil {
 			t.Fatalf("[%s] failed %v", tt, err)
 		}

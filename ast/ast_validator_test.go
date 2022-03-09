@@ -13,6 +13,16 @@ func TestValidateSuccess(t *testing.T) {
 				Type: TypeElLayout,
 				Children: []El{
 					{
+						Type: TypeElText,
+					},
+				},
+			},
+		},
+		{
+			in: El{
+				Type: TypeElLayout,
+				Children: []El{
+					{
 						Type: TypeElColumn,
 						Children: []El{
 							{
@@ -95,7 +105,7 @@ func TestValidateError(t *testing.T) {
 					El{Type: TypeElText, Children: []El{El{}}},
 				}},
 			}},
-			exp: "invalid child found : text should should be placed in el",
+			exp: "invalid child found : text should be placed in el",
 		},
 		6: {
 			in: El{Type: TypeElLayout, Children: []El{
