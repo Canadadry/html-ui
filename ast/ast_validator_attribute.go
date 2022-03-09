@@ -9,8 +9,10 @@ func validateAttribute(el El) error {
 	validationCtx := map[ElType]map[AttrType]struct{}{
 		TypeElLayout: map[AttrType]struct{}{},
 		TypeElImage: map[AttrType]struct{}{
-			TypeAttrSrc: {},
-			TypeAttrAlt: {},
+			TypeAttrWidth:  {},
+			TypeAttrHeight: {},
+			TypeAttrSrc:    {},
+			TypeAttrAlt:    {},
 		},
 		TypeElColumn: map[AttrType]struct{}{
 			TypeAttrWidth:         {},

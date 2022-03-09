@@ -63,7 +63,7 @@ func validate(el El) error {
 			}
 			err = validateText(c)
 		case TypeElEl:
-			return validate(c)
+			err = validate(c)
 		default:
 			err = fmt.Errorf("%w : '%s'", errInvalideTypeFound, c.Type)
 		}

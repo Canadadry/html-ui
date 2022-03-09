@@ -101,7 +101,18 @@ func TestValidateAttributeError(t *testing.T) {
 					buildElWidthAttr(TypeElImage, []AttrType{"fake"}),
 				),
 			),
-			exp: "img cannot have attribute 'fake' possibilities are [alt src]",
+			exp: "img cannot have attribute 'fake' possibilities are [alt height src width]",
+		},
+		41: {
+			in: buildElWidthAttr(
+				TypeElLayout,
+				[]AttrType{},
+				buildElWidthAttr(TypeElRow, []AttrType{},
+					buildElWidthAttr(TypeElEl, []AttrType{}),
+					buildElWidthAttr(TypeElImage, []AttrType{TypeAttrPadding}),
+				),
+			),
+			exp: "img cannot have attribute 'padding' possibilities are [alt height src width]",
 		},
 		5: {
 			in: buildElWidthAttr(
