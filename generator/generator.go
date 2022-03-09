@@ -73,7 +73,10 @@ func (g *generator) generateLayout(el ast.El) (html.Tag, error) {
 }
 
 func (g *generator) generateColumn(el ast.El) (html.Tag, error) {
-	classes := g.parseAttribute(el.Attr, UniqueClassesFrom("s c ct cl"))
+	classes, err := g.parseAttribute(el.Attr, UniqueClassesFrom("s c ct cl"))
+	if err != nil {
+		return html.Tag{}, err
+	}
 	g.mode = modeColumn
 	children, err := g.generate(el.Children)
 	return html.Div(
@@ -83,7 +86,11 @@ func (g *generator) generateColumn(el ast.El) (html.Tag, error) {
 }
 
 func (g *generator) generateRow(el ast.El) (html.Tag, error) {
-	classes := g.parseAttribute(el.Attr, UniqueClassesFrom("s r cl ccy"))
+	classes, err := g.parseAttribute(el.Attr, UniqueClassesFrom("s r cl ccy"))
+	if err != nil {
+		return html.Tag{}, err
+	}
+
 	g.mode = modeColumn
 	children, err := g.generate(el.Children)
 	return html.Div(
@@ -96,7 +103,10 @@ func (g *generator) generateEl(el ast.El) (html.Tag, error) {
 	if len(el.Children) > 0 && el.Children[0].Type == ast.TypeElText {
 		return g.generateElText(el)
 	}
-	classes := g.parseAttribute(el.Attr, UniqueClassesFrom("s e"))
+	classes, err := g.parseAttribute(el.Attr, UniqueClassesFrom("s e"))
+	if err != nil {
+		return html.Tag{}, err
+	}
 	g.mode = modeNormal
 	children, err := g.generate(el.Children)
 	tag := html.Div(
@@ -113,7 +123,10 @@ func (g *generator) generateElText(el ast.El) (html.Tag, error) {
 	if len(el.Attr) == 0 {
 		return g.generateText(el.Children[0].Content)
 	}
-	classes := g.parseAttribute(el.Attr, UniqueClassesFrom("s e"))
+	classes, err := g.parseAttribute(el.Attr, UniqueClassesFrom("s e"))
+	if err != nil {
+		return html.Tag{}, err
+	}
 	g.mode = modeNormal
 	children, err := g.generateText(el.Children[0].Content)
 	return html.Div(
@@ -133,14 +146,22 @@ func (g *generator) generateImage(el ast.El) (html.Tag, error) {
 			alt = attr.Value
 		}
 	}
-	divClasses := UniqueClassesFrom(g.parseAttribute(el.Attr, UniqueClassesFrom("s e ic")))
+	classes, err := g.parseAttribute(el.Attr, UniqueClassesFrom("s e ic"))
+	if err != nil {
+		return html.Tag{}, err
+	}
+	divClasses := UniqueClassesFrom(classes)
 	divClasses.Remove("hc")
 	divClasses.Remove("wc")
 	if divClasses.Has("he") {
 		divClasses.Remove("ic")
 		divClasses.Add("i")
 	}
-	imgClasses := UniqueClassesFrom(g.parseAttribute(el.Attr, UniqueClassesFrom("s e")))
+	classes, err = g.parseAttribute(el.Attr, UniqueClassesFrom("s e"))
+	if err != nil {
+		return html.Tag{}, err
+	}
+	imgClasses := UniqueClassesFrom(classes)
 	imgClasses.Remove("hc")
 	imgClasses.Remove("wc")
 	return html.Div(

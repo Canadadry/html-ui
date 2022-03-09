@@ -5,12 +5,16 @@ import (
 	"fmt"
 )
 
-func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) string {
+func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) (string, error) {
 	hasWidthAttr := false
 	hasHeightAttr := false
 	for _, attr := range attrs {
 		class := ""
 		switch attr.Type {
+		case ast.TypeAttrSrc:
+			continue
+		case ast.TypeAttrAlt:
+			continue
 		case ast.TypeAttrSpacing:
 			class = fmt.Sprintf("spacing-%s-%s", attr.Value, attr.Value)
 		case ast.TypeAttrFontSize:
@@ -75,7 +79,7 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) st
 				base.Add("cy")
 			}
 		default:
-			continue
+			return "", fmt.Errorf("cannot generate class for attribute '%s'", attr.Type)
 		}
 		if class != "" {
 			base.Add(class)
@@ -88,5 +92,5 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) st
 	if !hasHeightAttr {
 		base.Add("hc")
 	}
-	return base.String()
+	return base.String(), nil
 }
