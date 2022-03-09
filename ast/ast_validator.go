@@ -39,6 +39,8 @@ func Validate(el El) error {
 		return validateText(el.Children[0])
 	case TypeElEl:
 		return validate(el.Children[0])
+	case TypeElForm:
+		return validate(el.Children[0])
 	}
 	return fmt.Errorf("%w : '%s'", errInvalideTypeFound, el.Children[0].Type)
 }
@@ -65,6 +67,8 @@ func validate(el El) error {
 			}
 			err = validateText(c)
 		case TypeElEl:
+			err = validate(c)
+		case TypeElForm:
 			err = validate(c)
 		default:
 			err = fmt.Errorf("%w : '%s'", errInvalideTypeFound, c.Type)

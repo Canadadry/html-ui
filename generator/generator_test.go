@@ -30,6 +30,7 @@ func TestGenerate(t *testing.T) {
 		"test16",
 		"test17",
 		"test18_part1",
+		"test18_part2",
 	}
 
 	for _, tt := range tests {
@@ -41,17 +42,17 @@ func TestGenerate(t *testing.T) {
 		p := parser.Parser{}
 		root, err := p.Parse(fIn)
 		if err != nil {
-			t.Fatalf("[%s] failed %v", tt, err)
+			t.Fatalf("[%s] failed parsing %v", tt, err)
 		}
 		err = ast.Validate(root)
 		if err != nil {
-			t.Fatalf("[%s] failed %v", tt, err)
+			t.Fatalf("[%s] failed validating %v", tt, err)
 		}
 
 		result := bytes.Buffer{}
 		err = Generate(&result, root)
 		if err != nil {
-			t.Fatalf("[%s] failed %v", tt, err)
+			t.Fatalf("[%s] failed generating %v", tt, err)
 		}
 
 		fOut, err := os.Open("testcase/" + tt + ".html")

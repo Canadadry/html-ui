@@ -70,6 +70,11 @@ func validateAttribute(el El) error {
 			TypeAttrBorderColor:   {},
 			TypeAttrBorderWidth:   {},
 		},
+		TypeElForm: map[AttrType]struct{}{
+			TypeAttrMethod: {},
+			TypeAttrAction: {},
+			TypeAttrName:   {},
+		},
 	}
 
 	ctx, ok := validationCtx[el.Type]

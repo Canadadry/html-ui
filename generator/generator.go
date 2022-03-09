@@ -58,6 +58,8 @@ func (g *generator) generate(el []ast.El) ([]html.Tag, error) {
 			child, err = g.generateButton(item)
 		case ast.TypeElText:
 			child, err = g.generateText(item.Content)
+		case ast.TypeElForm:
+			child, err = g.generateForm(item)
 		default:
 			return nil, fmt.Errorf("cannot generate '%s' : unknown type", item.Type)
 		}
@@ -212,6 +214,32 @@ func (g *generator) generateButton(el ast.El) (html.Tag, error) {
 			html.AttributeClass: classes,
 			html.AttributeName:  name,
 			html.AttributeValue: value,
+		},
+		children...,
+	), err
+}
+
+func (g *generator) generateForm(el ast.El) (html.Tag, error) {
+	name := ""
+	action := ""
+	method := ""
+	for _, attr := range el.Attr {
+		if attr.Type == ast.TypeAttrName {
+			name = attr.Value
+		}
+		if attr.Type == ast.TypeAttrAction {
+			action = attr.Value
+		}
+		if attr.Type == ast.TypeAttrMethod {
+			method = attr.Value
+		}
+	}
+	children, err := g.generate(el.Children)
+	return html.Form(
+		html.Attributes{
+			html.AttributeAction: action,
+			html.AttributeName:   name,
+			html.AttributeMethod: method,
 		},
 		children...,
 	), err

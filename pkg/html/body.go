@@ -124,7 +124,7 @@ func Li(attr Attributes, children ...Tag) Tag {
 func Form(attr Attributes, children ...Tag) Tag {
 	return Tag{
 		Name:            "form",
-		AttributesNames: []attribute{AttributeId, AttributeAction, AttributeMethod, AttributeClass, AttributeStyle, AttributeDataTest},
+		AttributesNames: []attribute{AttributeId, AttributeAction, AttributeName, AttributeMethod, AttributeClass, AttributeStyle, AttributeDataTest},
 		Attributes:      attr,
 		Children:        children,
 	}

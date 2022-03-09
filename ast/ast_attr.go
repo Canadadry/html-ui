@@ -25,6 +25,8 @@ const (
 	TypeAttrAlt                    = "alt"
 	TypeAttrName                   = "name"
 	TypeAttrValue                  = "value"
+	TypeAttrAction                 = "action"
+	TypeAttrMethod                 = "method"
 )
 
 var ValidAttrType = map[AttrType]struct{}{
@@ -44,6 +46,8 @@ var ValidAttrType = map[AttrType]struct{}{
 	TypeAttrAlt:           {},
 	TypeAttrName:          {},
 	TypeAttrValue:         {},
+	TypeAttrAction:        {},
+	TypeAttrMethod:        {},
 }
 
 type Attribute struct {
@@ -87,6 +91,8 @@ func (att *Attribute) Parse() error {
 	case TypeAttrAlt:
 	case TypeAttrName:
 	case TypeAttrValue:
+	case TypeAttrAction:
+	case TypeAttrMethod:
 	default:
 		err = fmt.Errorf("cannot parse unknown attr type %s", att.Type)
 	}

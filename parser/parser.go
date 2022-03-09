@@ -74,7 +74,7 @@ func parseAttributes(se xml.StartElement) ([]ast.Attribute, error) {
 	for _, attr := range se.Attr {
 		_, ok := ast.ValidAttrType[ast.AttrType(attr.Name.Local)]
 		if !ok {
-			return nil, fmt.Errorf("expected to got a Valid Attr Type got a '%s', possible values are %v", attr.Name.Local, ast.ValidAttrType)
+			return nil, fmt.Errorf("while parsing el type '%s' expected to got a valid attr type got a '%s', possible values are %v", se.Name.Local, attr.Name.Local, ast.ValidAttrType)
 		}
 		att := ast.Attribute{Type: ast.AttrType(attr.Name.Local), Value: attr.Value}
 		err := att.Parse()
