@@ -143,16 +143,8 @@ func (g *generator) generateElText(el ast.El) (html.Tag, error) {
 }
 
 func (g *generator) generateImage(el ast.El) (html.Tag, error) {
-	src := ""
-	alt := ""
-	for _, attr := range el.Attr {
-		if attr.Type == ast.TypeAttrSrc {
-			src = attr.Value
-		}
-		if attr.Type == ast.TypeAttrAlt {
-			alt = attr.Value
-		}
-	}
+	srcAttr, _ := el.GetAttr(ast.TypeAttrSrc)
+	altAttr, _ := el.GetAttr(ast.TypeAttrAlt)
 	classes, err := g.parseAttribute(el.Attr, UniqueClassesFrom("s e ic"))
 	if err != nil {
 		return html.Tag{}, err
@@ -176,8 +168,8 @@ func (g *generator) generateImage(el ast.El) (html.Tag, error) {
 		html.Img(
 			html.Attributes{
 				html.AttributeClass: imgClasses.String(),
-				html.AttributeSrc:   src,
-				html.AttributeAlt:   alt,
+				html.AttributeSrc:   srcAttr.Value,
+				html.AttributeAlt:   altAttr.Value,
 			},
 		),
 	), nil
@@ -194,16 +186,8 @@ func (g *generator) generateText(txt string) (html.Tag, error) {
 }
 
 func (g *generator) generateButton(el ast.El) (html.Tag, error) {
-	name := ""
-	value := ""
-	for _, attr := range el.Attr {
-		if attr.Type == ast.TypeAttrName {
-			name = attr.Value
-		}
-		if attr.Type == ast.TypeAttrValue {
-			value = attr.Value
-		}
-	}
+	nameAttr, _ := el.GetAttr(ast.TypeAttrName)
+	valueAttr, _ := el.GetAttr(ast.TypeAttrValue)
 	classes, err := g.parseAttribute(el.Attr, UniqueClassesFrom("s e ccx ccy cptr hc notxt sbt"))
 	if err != nil {
 		return html.Tag{}, err
@@ -212,34 +196,23 @@ func (g *generator) generateButton(el ast.El) (html.Tag, error) {
 	return html.Button(
 		html.Attributes{
 			html.AttributeClass: classes,
-			html.AttributeName:  name,
-			html.AttributeValue: value,
+			html.AttributeName:  nameAttr.Value,
+			html.AttributeValue: valueAttr.Value,
 		},
 		children...,
 	), err
 }
 
 func (g *generator) generateForm(el ast.El) (html.Tag, error) {
-	name := ""
-	action := ""
-	method := ""
-	for _, attr := range el.Attr {
-		if attr.Type == ast.TypeAttrName {
-			name = attr.Value
-		}
-		if attr.Type == ast.TypeAttrAction {
-			action = attr.Value
-		}
-		if attr.Type == ast.TypeAttrMethod {
-			method = attr.Value
-		}
-	}
+	nameAttr, _ := el.GetAttr(ast.TypeAttrName)
+	actionAttr, _ := el.GetAttr(ast.TypeAttrAction)
+	methodAttr, _ := el.GetAttr(ast.TypeAttrMethod)
 	children, err := g.generate(el.Children)
 	return html.Form(
 		html.Attributes{
-			html.AttributeAction: action,
-			html.AttributeName:   name,
-			html.AttributeMethod: method,
+			html.AttributeAction: actionAttr.Value,
+			html.AttributeName:   nameAttr.Value,
+			html.AttributeMethod: methodAttr.Value,
 		},
 		children...,
 	), err

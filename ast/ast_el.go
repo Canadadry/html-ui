@@ -44,6 +44,15 @@ type El struct {
 	Content  string
 }
 
+func (el *El) GetAttr(t AttrType) (Attribute, bool) {
+	for _, attr := range el.Attr {
+		if attr.Type == t {
+			return attr, true
+		}
+	}
+	return Attribute{}, false
+}
+
 func (el *El) Xml(w io.Writer, prefix string) error {
 	if el.Type == TypeElText {
 		_, err := fmt.Fprintf(w, "%s%s", prefix, el.Content)
