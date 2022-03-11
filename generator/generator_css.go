@@ -247,6 +247,9 @@ func generateSpacing(strSpace string) string {
   margin-bottom: -%spacing-half%px;
 }`
 	space, _ := strconv.ParseInt(strSpace, 10, 64)
+	if space <= 5 {
+		return ""
+	}
 	cssSpacing = strings.ReplaceAll(cssSpacing, "%spacing%", fmt.Sprintf("%d", space))
 	return strings.ReplaceAll(cssSpacing, "%spacing-half%", fmt.Sprintf("%d", space/2))
 }

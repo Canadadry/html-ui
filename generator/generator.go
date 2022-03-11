@@ -145,6 +145,16 @@ func (g *generator) generateElText(el ast.El) (html.Tag, error) {
 	), err
 }
 
+func (g *generator) generateText(txt string) (html.Tag, error) {
+	class := "s t wf hf"
+	if g.mode == modeColumn {
+		class = "s t wc hc"
+	}
+	return html.Inline(html.Div(html.Attributes{html.AttributeClass: class},
+		html.Text(txt),
+	)), nil
+}
+
 func (g *generator) generateImage(el ast.El) (html.Tag, error) {
 	srcAttr, _ := el.GetAttr(ast.TypeAttrSrc)
 	altAttr, _ := el.GetAttr(ast.TypeAttrAlt)
@@ -176,16 +186,6 @@ func (g *generator) generateImage(el ast.El) (html.Tag, error) {
 			},
 		),
 	), nil
-}
-
-func (g *generator) generateText(txt string) (html.Tag, error) {
-	class := "s t wf hf"
-	if g.mode == modeColumn {
-		class = "s t wc hc"
-	}
-	return html.Inline(html.Div(html.Attributes{html.AttributeClass: class},
-		html.Text(txt),
-	)), nil
 }
 
 func (g *generator) generateButton(el ast.El) (html.Tag, error) {
@@ -220,6 +220,7 @@ func (g *generator) generateForm(el ast.El) (html.Tag, error) {
 		children...,
 	), err
 }
+
 func (g *generator) generateInput(el ast.El) (html.Tag, error) {
 	nameAttr, _ := el.GetAttr(ast.TypeAttrName)
 	classes := []struct {
