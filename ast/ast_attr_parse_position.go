@@ -5,10 +5,10 @@ import (
 )
 
 const (
-	positonLeft  = "left"
-	positonRight = "right"
-	positonAbove = "above"
-	positonBelow = "below"
+	PositonLeft  = "left"
+	PositonRight = "right"
+	PositonAbove = "above"
+	PositonBelow = "below"
 )
 
 var (
@@ -18,10 +18,10 @@ var (
 func ParsePositionAttr(v string) error {
 	var err error
 	switch v {
-	case positonLeft:
-	case positonRight:
-	case positonAbove:
-	case positonBelow:
+	case PositonLeft:
+	case PositonRight:
+	case PositonAbove:
+	case PositonBelow:
 	default:
 		err = fmt.Errorf("%w : %s", ErrInvalidPosition, v)
 	}

@@ -14,10 +14,10 @@ func TestParsePositionAttr(t *testing.T) {
 			in:  "234",
 			err: ErrInvalidPosition,
 		},
-		{in: positonLeft},
-		{in: positonRight},
-		{in: positonAbove},
-		{in: positonBelow},
+		{in: PositonLeft},
+		{in: PositonRight},
+		{in: PositonAbove},
+		{in: PositonBelow},
 	}
 
 	for i, tt := range tests {
