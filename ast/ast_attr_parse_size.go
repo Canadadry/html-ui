@@ -16,6 +16,7 @@ const (
 	SizePxType      SizeType = "SizePxType"
 	SizePortionType          = "SizePortionType"
 	SizeFillType             = "SizeFillType"
+	SizeNoneType             = "SizeNoneType"
 )
 
 type SizePx int
@@ -32,6 +33,11 @@ type SizeFill struct{}
 
 func (SizeFill) Get() int       { return 0 }
 func (SizeFill) Type() SizeType { return SizeFillType }
+
+type SizeNone struct{}
+
+func (SizeNone) Get() int       { return 0 }
+func (SizeNone) Type() SizeType { return SizeNoneType }
 
 func ParseSizeAttr(width string) (AttrSize, error) {
 	if strings.HasPrefix(width, "px:") {

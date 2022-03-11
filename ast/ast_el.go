@@ -53,6 +53,15 @@ func (el *El) GetAttr(t AttrType) (Attribute, bool) {
 	return Attribute{}, false
 }
 
+func (el *El) GetChild(t ElType) (El, bool) {
+	for _, c := range el.Children {
+		if c.Type == t {
+			return c, true
+		}
+	}
+	return El{}, false
+}
+
 func (el *El) Xml(w io.Writer, prefix string) error {
 	if el.Type == TypeElText {
 		_, err := fmt.Fprintf(w, "%s%s", prefix, el.Content)

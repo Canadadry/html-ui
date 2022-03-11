@@ -133,7 +133,7 @@ func Form(attr Attributes, children ...Tag) Tag {
 func Input(attr Attributes) Tag {
 	return Tag{
 		Name:            "input",
-		AttributesNames: []attribute{AttributeId, AttributePlaceholder, AttributeType, AttributeName, AttributeValue, AttributeClass, AttributeStyle, AttributeDataTest},
+		AttributesNames: []attribute{AttributeId, AttributePlaceholder, AttributeType, AttributeName, AttributeValue, AttributeClass, AttributeStyle, AttributeDataTest, AttributeSpellCheck},
 		Attributes:      attr,
 		Closed:          true,
 	}

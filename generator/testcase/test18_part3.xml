@@ -17,9 +17,7 @@
 					</el>
 				</label>
 				<placeholder>
-					<el bg-color="rgb(240,0,245)" font-color="white" border-rounded="3" padding="30">
 						placeholder
-					</el>
 				</placeholder>
 			</input>
 			<button bg-color="rgb(238,0,0)" focus-bg-color="rgb(0,255,0)" padding="30" name="test" value="button">

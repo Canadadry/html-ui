@@ -19,6 +19,8 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) (s
 			continue
 		case ast.TypeAttrValue:
 			continue
+		case ast.TypeAttrType:
+			continue
 		case ast.TypeAttrSpacing:
 			class = fmt.Sprintf("spacing-%s-%s", attr.Value, attr.Value)
 		case ast.TypeAttrFontSize:
@@ -48,6 +50,7 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) (s
 				base.Add("wfp")
 			case ast.SizeFillType:
 				class = "wf"
+			case ast.SizeNoneType:
 			}
 		case ast.TypeAttrHeight:
 			hasHeightAttr = true
@@ -60,6 +63,7 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) (s
 				base.Add("hfp")
 			case ast.SizeFillType:
 				class = "hf"
+			case ast.SizeNoneType:
 			}
 		case ast.TypeAttrAlign:
 			switch attr.AlignX {

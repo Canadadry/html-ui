@@ -4,6 +4,7 @@ import (
 	"app/ast"
 	"app/pkg/html"
 	"fmt"
+	"image/color"
 	"io"
 )
 
@@ -60,6 +61,8 @@ func (g *generator) generate(el []ast.El) ([]html.Tag, error) {
 			child, err = g.generateText(item.Content)
 		case ast.TypeElForm:
 			child, err = g.generateForm(item)
+		case ast.TypeElInput:
+			child, err = g.generateInput(item)
 		default:
 			return nil, fmt.Errorf("cannot generate '%s' : unknown type", item.Type)
 		}
@@ -216,4 +219,87 @@ func (g *generator) generateForm(el ast.El) (html.Tag, error) {
 		},
 		children...,
 	), err
+}
+func (g *generator) generateInput(el ast.El) (html.Tag, error) {
+	nameAttr, _ := el.GetAttr(ast.TypeAttrName)
+	classes := []struct {
+		in     string
+		attr   []ast.Attribute
+		result string
+	}{
+		{
+			in: "ctxt hc lbl r s",
+			attr: []ast.Attribute{
+				{Type: ast.TypeAttrSpacing, Value: "5"},
+				{Type: ast.TypeAttrWidth, Size: ast.SizeFill{}},
+			},
+		},
+		{
+
+			in: "e focus-within hc pad-0-3060-0-3060 s",
+			attr: []ast.Attribute{
+				{Type: ast.TypeAttrBorderWidth, Value: "1"},
+				{Type: ast.TypeAttrBorderRounded, Value: "3"},
+				{Type: ast.TypeAttrBorderColor, Color: color.RGBA{186, 189, 182, 0}},
+				{Type: ast.TypeAttrBgColor, Color: color.RGBA{255, 255, 255, 0}},
+				{Type: ast.TypeAttrSpacing, Value: "5"},
+				{Type: ast.TypeAttrWidth, Size: ast.SizeFill{}},
+			},
+		},
+		{
+			in: "e it s",
+			attr: []ast.Attribute{
+				{Type: ast.TypeAttrSpacing, Value: "5"},
+				{Type: ast.TypeAttrWidth, Size: ast.SizeFill{}},
+				{Type: ast.TypeAttrHeight, Size: ast.SizeNone{}},
+			},
+		},
+	}
+	for i, c := range classes {
+		var err error
+		classes[i].result, err = g.parseAttribute(c.attr, UniqueClassesFrom(c.in))
+		if err != nil {
+			return html.Tag{}, err
+		}
+	}
+	htmlLabel := html.Div(
+		html.Attributes{
+			html.AttributeClass: "e s",
+		},
+	)
+	label, ok := el.GetChild(ast.TypeElLabel)
+	if ok {
+		children, err := g.generate(label.Children)
+		if err != nil {
+			return html.Tag{}, err
+		}
+		htmlLabel.Children = append(htmlLabel.Children, children...)
+	}
+	placeholderTxt := ""
+	placeholder, ok := el.GetChild(ast.TypeElPlaceholder)
+	if ok {
+		placeholderTxt = placeholder.Children[0].Content
+	}
+
+	return html.Label(
+		html.Attributes{
+			html.AttributeClass: classes[0].result,
+		},
+		html.Div(
+			html.Attributes{
+				html.AttributeClass: classes[1].result,
+			},
+			html.Input(
+				html.Attributes{
+					html.AttributeClass:       classes[2].result,
+					html.AttributeType:        "text",
+					html.AttributeSpellCheck:  "false",
+					html.AttributePlaceholder: placeholderTxt,
+					html.AttributeName:        nameAttr.Value,
+					html.AttributeStyle:       "line-height: calc(1em + 24px); height: calc(1em + 24px);",
+				},
+			),
+		),
+		htmlLabel,
+	), nil
 }

@@ -52,10 +52,7 @@ var (
 			TypeElColumn: {},
 		},
 		TypeElPlaceholder: {
-			TypeElText:   {},
-			TypeElEl:     {},
-			TypeElRow:    {},
-			TypeElColumn: {},
+			TypeElText: {},
 		},
 	}
 	maxChildrenLenByType = MaxChildrenLenByType{

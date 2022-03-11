@@ -33,6 +33,7 @@ const (
 	AttributeTitle           attribute = "title"
 	AttributeColspan         attribute = "colspan"
 	AttributeTarget          attribute = "target"
+	AttributeSpellCheck      attribute = "spellcheck"
 )
 
 type Document struct {
