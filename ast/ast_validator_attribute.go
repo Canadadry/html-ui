@@ -75,6 +75,15 @@ func validateAttribute(el El) error {
 			TypeAttrAction: {},
 			TypeAttrName:   {},
 		},
+		TypeElInput: map[AttrType]struct{}{
+			TypeAttrName:  {},
+			TypeAttrValue: {},
+			TypeAttrType:  {},
+		},
+		TypeElLabel: map[AttrType]struct{}{
+			TypeAttrPosition: {},
+		},
+		TypeElPlaceholder: map[AttrType]struct{}{},
 	}
 
 	ctx, ok := validationCtx[el.Type]

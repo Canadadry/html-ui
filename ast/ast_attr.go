@@ -27,6 +27,8 @@ const (
 	TypeAttrValue                  = "value"
 	TypeAttrAction                 = "action"
 	TypeAttrMethod                 = "method"
+	TypeAttrType                   = "type"
+	TypeAttrPosition               = "position"
 )
 
 var ValidAttrType = map[AttrType]struct{}{
@@ -48,6 +50,8 @@ var ValidAttrType = map[AttrType]struct{}{
 	TypeAttrValue:         {},
 	TypeAttrAction:        {},
 	TypeAttrMethod:        {},
+	TypeAttrType:          {},
+	TypeAttrPosition:      {},
 }
 
 type Attribute struct {
@@ -87,12 +91,15 @@ func (att *Attribute) Parse() error {
 		att.Color, err = ParseColorAttr(att.Value)
 	case TypeAttrBorderWidth:
 		att.Number, err = ParseNumberAttr(att.Value)
+	case TypeAttrPosition:
+		err = ParsePositionAttr(att.Value)
 	case TypeAttrSrc:
 	case TypeAttrAlt:
 	case TypeAttrName:
 	case TypeAttrValue:
 	case TypeAttrAction:
 	case TypeAttrMethod:
+	case TypeAttrType:
 	default:
 		err = fmt.Errorf("cannot parse unknown attr type %s", att.Type)
 	}

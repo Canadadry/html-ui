@@ -1,45 +1,32 @@
 package ast
 
 import (
+	"errors"
 	"testing"
 )
+
+func buildEl(t ElType, children ...El) El {
+	e := El{
+		Type:     t,
+		Children: children,
+	}
+	return e
+}
 
 func TestValidateSuccess(t *testing.T) {
 	tests := []struct {
 		in El
 	}{
 		{
-			in: El{
-				Type: TypeElLayout,
-				Children: []El{
-					{
-						Type: TypeElText,
-					},
-				},
-			},
+			in: buildEl(TypeElLayout, buildEl(TypeElText)),
 		},
 		{
-			in: El{
-				Type: TypeElLayout,
-				Children: []El{
-					{
-						Type: TypeElColumn,
-						Children: []El{
-							{
-								Type: TypeElImage,
-							},
-							{
-								Type: TypeElEl,
-								Children: []El{
-									{
-										Type: TypeElText,
-									},
-								},
-							},
-						},
-					},
-				},
-			},
+			in: buildEl(TypeElLayout,
+				buildEl(TypeElColumn,
+					buildEl(TypeElImage),
+					buildEl(TypeElEl, buildEl(TypeElText)),
+				),
+			),
 		},
 	}
 
@@ -53,99 +40,35 @@ func TestValidateSuccess(t *testing.T) {
 func TestValidateError(t *testing.T) {
 	tests := map[int]struct {
 		in  El
-		exp string
+		exp error
 	}{
 		0: {
 			in:  El{},
-			exp: "root should be of type layout",
+			exp: errInvalidRootType,
 		},
 		1: {
-			in:  El{Type: TypeElLayout},
-			exp: "layout has wrong number of children to render (expected only one)",
+			in:  buildEl(TypeElLayout, buildEl(TypeElEl), buildEl(TypeElEl)),
+			exp: errInvalidChildrenLen,
 		},
 		2: {
-			in:  El{Type: TypeElLayout, Children: []El{El{}, El{}}},
-			exp: "layout has wrong number of children to render (expected only one)",
+			in:  buildEl(TypeElLayout, El{}),
+			exp: errInvalidChildType,
 		},
 		3: {
-			in:  El{Type: TypeElLayout, Children: []El{El{}}},
-			exp: "el with an invalid type found : ''",
-		},
-		31: {
-			in: El{Type: TypeElLayout, Children: []El{
-				El{Type: ElType("fake1")},
-			}},
-			exp: "el with an invalid type found : 'fake1'",
-		},
-		32: {
-			in: El{Type: TypeElLayout, Children: []El{
-				El{Type: TypeElColumn, Children: []El{
-					El{Type: ElType("fake2")},
-				}},
-			}},
-			exp: "el with an invalid type found : 'fake2'",
+			in:  buildEl(TypeElLayout, buildEl(TypeElEl, El{})),
+			exp: errInvalidChildType,
 		},
 		4: {
-			in: El{Type: TypeElLayout, Children: []El{
-				El{Type: TypeElImage, Children: []El{El{}}},
-			}},
-			exp: "invalid image found : should not have children",
+			in:  buildEl(TypeElLayout, buildEl(TypeElEl, buildEl(TypeElImage, El{}))),
+			exp: errInvalidChildrenLen,
 		},
 		5: {
-			in: El{Type: TypeElLayout, Children: []El{
-				El{Type: TypeElColumn, Children: []El{
-					El{Type: TypeElImage, Children: []El{El{}}},
-				}},
-			}},
-			exp: "invalid image found : should not have children",
-		},
-		51: {
-			in: El{Type: TypeElLayout, Children: []El{
-				El{Type: TypeElColumn, Children: []El{
-					El{Type: TypeElText, Children: []El{El{}}},
-				}},
-			}},
-			exp: "invalid child found : text should be placed in el",
+			in:  buildEl(TypeElLayout, buildEl(TypeElColumn, buildEl(TypeElText))),
+			exp: errInvalidChildType,
 		},
 		6: {
-			in: El{Type: TypeElLayout, Children: []El{
-				El{Type: TypeElEl, Children: []El{
-					El{Type: TypeElText, Children: []El{El{}}},
-				}},
-			}},
-			exp: "invalid text found : should not have children",
-		},
-		7: {
-			in: El{Type: TypeElLayout, Children: []El{
-				El{Type: TypeElColumn, Children: []El{
-					El{Type: TypeElEl, Children: []El{
-						El{Type: TypeElText, Children: []El{El{}}},
-					}},
-				}},
-			}},
-			exp: "invalid text found : should not have children",
-		},
-		8: {
-			in: El{Type: TypeElLayout, Children: []El{
-				El{Type: TypeElRow, Children: []El{
-					El{Type: TypeElEl, Children: []El{
-						El{Type: TypeElText, Children: []El{El{}}},
-					}},
-				}},
-			}},
-			exp: "invalid text found : should not have children",
-		},
-		9: {
-			in: El{Type: TypeElLayout, Children: []El{
-				El{Type: TypeElRow, Children: []El{
-					El{Type: TypeElRow, Children: []El{
-						El{Type: TypeElEl, Children: []El{
-							El{Type: TypeElText, Children: []El{El{}}},
-						}},
-					}},
-				}},
-			}},
-			exp: "invalid text found : should not have children",
+			in:  buildEl(TypeElLayout, buildEl(TypeElEl, buildEl(TypeElText, El{}))),
+			exp: errInvalidChildrenLen,
 		},
 	}
 
@@ -154,7 +77,7 @@ func TestValidateError(t *testing.T) {
 		if err == nil {
 			t.Fatalf("[%d] failed : exp '%s' got nil", i, tt.exp)
 		}
-		if err.Error() != tt.exp {
+		if !errors.Is(err, tt.exp) {
 			t.Fatalf("[%d] failed : exp '%s', got '%v'", i, tt.exp, err)
 		}
 	}
