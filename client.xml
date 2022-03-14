@@ -1,0 +1,51 @@
+<layout>
+	<column width="fill" height="fill" bg-color="#f6f6f6" spacing="100">
+		<el width="fill" height="px:68" align="top" bg-color="#0ab09a">
+			<el align="centerX,centerY">
+				<img height="px:48" src="public/logo.png" alt="logo"></img>
+			</el>
+		</el>
+		<column  align="centerX">
+			<form>
+				<column padding="30" bg-color="white" border-width="1" border-color="#dee2e6" border-rounded="10" spacing="10">
+					<row>
+						<el width="px:40"></el>
+							<column spacing="20">
+							<el align="centerX" font-size="30" font-color="#6e6e6e">Connexion</el>
+							<input type="text" name="username" value="">
+								<label position="above"><el font-size="15" font-color="#909090">IDENTIFIANT</el></label>
+								<placeholder>votre email : jean@paul.fr</placeholder>
+							</input>
+							<input type="text" name="username" value="">
+								<label position="above"><el font-size="15" font-color="#909090">MOT DE PASSE</el></label>
+								<placeholder>********</placeholder>
+							</input>
+							<row spacing="50">
+								<el align="left,centerY" font-color="#909090" font-size="15">mot de passe oublié?</el>
+								<button align="right" bg-color="#0ab09a" border-rounded="30" padding="10">
+									<row>
+										<el width="px:20"></el>
+										<el font-color="white">Se connecter</el>
+										<el width="px:20"></el>
+									</row>
+								</button>
+							</row>
+						</column>
+						<el width="px:40"></el>
+					</row>
+				</column>
+			</form>
+			<el align="centerX" font-size="15" font-color="#909090">everycheck in english</el>
+		</column>
+		<row width="fill" bg-color="white" padding="15">
+			<el width="portion:2" font-size="20" font-color="#0ab09a">EVERYCHECK.COM</el>
+			<row width="portion:8" bg-color="white">
+				<el width="portion:1"><el align="centerX" font-color="#909090" font-size="15">CGU</el></el>
+				<el width="portion:1"><el align="centerX" font-color="#909090" font-size="15">MENTIONS LÉGALES</el></el>
+				<el width="portion:1"><el align="centerX" font-color="#909090" font-size="15">CONFIDENTIALITÉ ET COOKIE</el></el>
+				<el width="portion:1"><el align="centerX" font-color="#909090" font-size="15">INFORMATIQUE ET LIBERTÉ</el></el>
+			</row>
+			<el width="portion:2"></el>
+		</row>
+	</column>
+</layout>
