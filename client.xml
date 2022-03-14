@@ -1,5 +1,8 @@
 <layout>
-	<column width="fill" height="fill" bg-color="#f6f6f6" spacing="100">
+	<definition>
+		<font name="Poppins" src="https://fonts.googleapis.com/css2?family=Poppins"/>
+	</definition>
+	<column width="fill" height="fill" bg-color="#f6f6f6" spacing="100" font-family="Poppins">
 		<el width="fill" height="px:68" align="top" bg-color="#0ab09a">
 			<el align="centerX,centerY">
 				<img height="px:48" src="public/logo.png" alt="logo"></img>
