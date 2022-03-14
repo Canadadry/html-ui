@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func generateHead(cssClasses UniqueClasses) ([]html.Tag, error) {
+func generateHead(cssClasses UniqueClasses, fonts fontDefiniton) ([]html.Tag, error) {
 	out := []html.Tag{
 		html.Link(html.Attributes{
 			html.AttributeHref: "public/base.css",
@@ -19,11 +19,16 @@ func generateHead(cssClasses UniqueClasses) ([]html.Tag, error) {
 	css := cssClasses.Sorted()
 	style := ""
 
-	predefinedCssClasses := UniqueClassesFrom("wf hf")
+	for name, url := range fonts {
+		style += generateFontDefinition(string(name), string(url))
+	}
 
+	predefinedCssClasses := UniqueClassesFrom("wf hf")
 	for _, class := range css {
 		switch true {
 		case predefinedCssClasses.Has(class):
+			continue
+		case strings.HasPrefix(class, "ff-"):
 			continue
 		case strings.HasPrefix(class, "spacing-"):
 			part := strings.Split(class, "-")
@@ -249,4 +254,23 @@ func generateSpacing(strSpace string) string {
 	space, _ := strconv.ParseInt(strSpace, 10, 64)
 	cssSpacing = strings.ReplaceAll(cssSpacing, "%spacing%", fmt.Sprintf("%d", space))
 	return strings.ReplaceAll(cssSpacing, "%spacing-half%", fmt.Sprintf("%d", space/2))
+}
+
+func generateFontDefinition(name, url string) string {
+	style := `@import url('%url%');
+.ff-%lowerName%sans-serif .font-open-sanshelveticaverdanasans-serif.cap, .ff-%lowerName%sans-serif .font-open-sanshelveticaverdanasans-serif .cap {line-height: 1;}
+.ff-%lowerName%sans-serif .font-open-sanshelveticaverdanasans-serif.cap> .t, .ff-%lowerName%sans-serif .font-open-sanshelveticaverdanasans-serif .cap > .t {vertical-align: 0;line-height: 1;}
+.font-open-sanshelveticaverdanasans-serif .ff-%lowerName%sans-serif.cap, .font-open-sanshelveticaverdanasans-serif .ff-%lowerName%sans-serif .cap {line-height: 1;}
+.font-open-sanshelveticaverdanasans-serif .ff-%lowerName%sans-serif.cap> .t, .font-open-sanshelveticaverdanasans-serif .ff-%lowerName%sans-serif .cap > .t {vertical-align: 0;line-height: 1;}
+.ff-%lowerName%sans-serif.cap, .ff-%lowerName%sans-serif .cap {line-height: 1;}
+.ff-%lowerName%sans-serif.cap> .t, .ff-%lowerName%sans-serif .cap > .t {vertical-align: 0;line-height: 1;}
+.ff-%lowerName%sans-serif{
+  font-family: "%name%", sans-serif;
+  font-feature-settings: ;
+  font-variant: normal;
+}`
+	style = strings.ReplaceAll(style, "%name%", name)
+	style = strings.ReplaceAll(style, "%lowerName%", strings.ToLower(name))
+	style = strings.ReplaceAll(style, "%url%", url)
+	return style
 }

@@ -1,6 +1,9 @@
 <layout>
+	<definition>
+		<font name="Sofia" src="https://fonts.googleapis.com/css?family=Sofia"/>
+	</definition>
 	<row width="fill" height="fill" spacing="100" bg-color="pink">
-		<column width="px:200" spacing="35" bg-color="green" height="fill">
+		<column width="px:200" spacing="35" bg-color="green" height="fill" font-family="Sofia">
 			<el height="portion:1">hello world!</el>
 			<el height="portion:2">hello world!</el>
 			<el height="portion:3">hello world!</el>

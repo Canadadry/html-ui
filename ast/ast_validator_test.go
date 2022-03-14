@@ -48,6 +48,10 @@ func TestValidateError(t *testing.T) {
 		},
 		1: {
 			in:  buildEl(TypeElLayout, buildEl(TypeElEl), buildEl(TypeElEl)),
+			exp: errInvalidChildrenDuplicatedType,
+		},
+		10: {
+			in:  buildEl(TypeElLayout, buildEl(TypeElDefinition), buildEl(TypeElEl), buildEl(TypeElEl)),
 			exp: errInvalidChildrenLen,
 		},
 		2: {

@@ -16,7 +16,7 @@ func Generate(w io.Writer, el ast.El) error {
 	if err != nil {
 		return err
 	}
-	head, err := generateHead(gen.css)
+	head, err := generateHead(gen.css, gen.fonts)
 	if err != nil {
 		return err
 	}
@@ -34,9 +34,14 @@ const (
 	modeColumn      = "column"
 )
 
+type name string
+type url string
+type fontDefiniton map[name]url
+
 type generator struct {
-	css  UniqueClasses
-	mode mode
+	css   UniqueClasses
+	mode  mode
+	fonts fontDefiniton
 }
 
 func (g *generator) generate(el []ast.El) ([]html.Tag, error) {
@@ -47,6 +52,8 @@ func (g *generator) generate(el []ast.El) ([]html.Tag, error) {
 		switch item.Type {
 		case ast.TypeElLayout:
 			child, err = g.generateLayout(item)
+		case ast.TypeElDefinition:
+			child, err = g.generateDefinition(item)
 		case ast.TypeElColumn:
 			child, err = g.generateColumn(item)
 		case ast.TypeElRow:
@@ -69,7 +76,9 @@ func (g *generator) generate(el []ast.El) ([]html.Tag, error) {
 		if err != nil {
 			return nil, err
 		}
-		out = append(out, child)
+		if child.Name != "" {
+			out = append(out, child)
+		}
 	}
 	return out, nil
 }
@@ -350,4 +359,30 @@ func (g *generator) generateInput(el ast.El) (html.Tag, error) {
 		},
 		children...,
 	), nil
+}
+
+func (g *generator) generateDefinition(el ast.El) (html.Tag, error) {
+	for _, c := range el.Children {
+		if err := g.generateFont(c); err != nil {
+			return html.Tag{}, err
+		}
+	}
+	return html.Tag{}, nil
+}
+
+func (g *generator) generateFont(el ast.El) error {
+	nameAttr, ok := el.GetAttr(ast.TypeAttrName)
+	if !ok {
+		return fmt.Errorf("on %s attr %s is required", el.Type, ast.TypeAttrName)
+	}
+	srcAttr, ok := el.GetAttr(ast.TypeAttrSrc)
+	if !ok {
+		return fmt.Errorf("on %s attr %s is required", el.Type, ast.TypeAttrSrc)
+	}
+
+	if g.fonts == nil {
+		g.fonts = fontDefiniton{}
+	}
+	g.fonts[name(nameAttr.Value)] = url(srcAttr.Value)
+	return nil
 }
