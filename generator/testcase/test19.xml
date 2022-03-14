@@ -1,0 +1,16 @@
+<layout>
+	<font name="Sofia" src="https://fonts.googleapis.com/css?family=Sofia"/>
+	<column spacing="10">
+		<el>Woohoo, I'm stylish text</el>
+		<el>
+			<el>Woohoo, I'm stylish text</el>
+		</el>
+		<el font-familly="Sofia">
+			<el>Woohoo, I'm stylish text</el>
+		</el>
+		<row font-familly="Sofia" spacing="10">
+			<el>Woohoo, I'm stylish text</el>
+			<el>Woohoo, I'm stylish text</el>
+		</row>
+	</column>
+</layout>
