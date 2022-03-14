@@ -16,7 +16,7 @@ func Generate(w io.Writer, el ast.El) error {
 	if err != nil {
 		return err
 	}
-	head, err := generateHead(gen.css)
+	head, err := generateHead(gen.css, gen.fonts)
 	if err != nil {
 		return err
 	}
@@ -34,9 +34,14 @@ const (
 	modeColumn      = "column"
 )
 
+type name string
+type url string
+type fontDefiniton map[name]url
+
 type generator struct {
-	css  UniqueClasses
-	mode mode
+	css   UniqueClasses
+	mode  mode
+	fonts fontDefiniton
 }
 
 func (g *generator) generate(el []ast.El) ([]html.Tag, error) {
@@ -366,6 +371,18 @@ func (g *generator) generateDefinition(el ast.El) (html.Tag, error) {
 }
 
 func (g *generator) generateFont(el ast.El) error {
-	g.css.Add("font-definition-")
+	nameAttr, ok := el.GetAttr(ast.TypeAttrName)
+	if !ok {
+		return fmt.Errorf("on %s attr %s is required", el.Type, ast.TypeAttrName)
+	}
+	srcAttr, ok := el.GetAttr(ast.TypeAttrSrc)
+	if !ok {
+		return fmt.Errorf("on %s attr %s is required", el.Type, ast.TypeAttrSrc)
+	}
+
+	if g.fonts == nil {
+		g.fonts = fontDefiniton{}
+	}
+	g.fonts[name(nameAttr.Value)] = url(srcAttr.Value)
 	return nil
 }
