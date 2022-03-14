@@ -7,7 +7,12 @@ import (
 
 func validateAttribute(el El) error {
 	validationCtx := map[ElType]map[AttrType]struct{}{
-		TypeElLayout: map[AttrType]struct{}{},
+		TypeElLayout:     map[AttrType]struct{}{},
+		TypeElDefinition: map[AttrType]struct{}{},
+		TypeElFont: map[AttrType]struct{}{
+			TypeAttrSrc:  {},
+			TypeAttrName: {},
+		},
 		TypeElImage: map[AttrType]struct{}{
 			TypeAttrWidth:  {},
 			TypeAttrHeight: {},
@@ -26,6 +31,7 @@ func validateAttribute(el El) error {
 			TypeAttrBorderRounded: {},
 			TypeAttrBorderColor:   {},
 			TypeAttrBorderWidth:   {},
+			TypeAttrFontFamily:    {},
 		},
 		TypeElRow: map[AttrType]struct{}{
 			TypeAttrWidth:         {},
@@ -39,6 +45,7 @@ func validateAttribute(el El) error {
 			TypeAttrBorderRounded: {},
 			TypeAttrBorderColor:   {},
 			TypeAttrBorderWidth:   {},
+			TypeAttrFontFamily:    {},
 		},
 		TypeElText: map[AttrType]struct{}{},
 		TypeElButton: map[AttrType]struct{}{
@@ -56,6 +63,7 @@ func validateAttribute(el El) error {
 			TypeAttrBorderWidth:   {},
 			TypeAttrName:          {},
 			TypeAttrValue:         {},
+			TypeAttrFontFamily:    {},
 		},
 		TypeElEl: map[AttrType]struct{}{
 			TypeAttrWidth:         {},
@@ -69,6 +77,7 @@ func validateAttribute(el El) error {
 			TypeAttrBorderRounded: {},
 			TypeAttrBorderColor:   {},
 			TypeAttrBorderWidth:   {},
+			TypeAttrFontFamily:    {},
 		},
 		TypeElForm: map[AttrType]struct{}{
 			TypeAttrMethod: {},

@@ -25,6 +25,10 @@ func generateHead(cssClasses UniqueClasses) ([]html.Tag, error) {
 		switch true {
 		case predefinedCssClasses.Has(class):
 			continue
+		case strings.HasPrefix(class, "ff-"):
+			continue
+		case strings.HasPrefix(class, "font-definition-"):
+			style += generateFontDefinition(class)
 		case strings.HasPrefix(class, "spacing-"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
@@ -249,4 +253,19 @@ func generateSpacing(strSpace string) string {
 	space, _ := strconv.ParseInt(strSpace, 10, 64)
 	cssSpacing = strings.ReplaceAll(cssSpacing, "%spacing%", fmt.Sprintf("%d", space))
 	return strings.ReplaceAll(cssSpacing, "%spacing-half%", fmt.Sprintf("%d", space/2))
+}
+
+func generateFontDefinition(class string) string {
+	return `@import url('https://fonts.googleapis.com/css?family=Sofia');
+.ff-sofiasans-serif .font-open-sanshelveticaverdanasans-serif.cap, .ff-sofiasans-serif .font-open-sanshelveticaverdanasans-serif .cap {line-height: 1;}
+.ff-sofiasans-serif .font-open-sanshelveticaverdanasans-serif.cap> .t, .ff-sofiasans-serif .font-open-sanshelveticaverdanasans-serif .cap > .t {vertical-align: 0;line-height: 1;}
+.font-open-sanshelveticaverdanasans-serif .ff-sofiasans-serif.cap, .font-open-sanshelveticaverdanasans-serif .ff-sofiasans-serif .cap {line-height: 1;}
+.font-open-sanshelveticaverdanasans-serif .ff-sofiasans-serif.cap> .t, .font-open-sanshelveticaverdanasans-serif .ff-sofiasans-serif .cap > .t {vertical-align: 0;line-height: 1;}
+.ff-sofiasans-serif.cap, .ff-sofiasans-serif .cap {line-height: 1;}
+.ff-sofiasans-serif.cap> .t, .ff-sofiasans-serif .cap > .t {vertical-align: 0;line-height: 1;}
+.ff-sofiasans-serif{
+  font-family: "Sofia", sans-serif;
+  font-feature-settings: ;
+  font-variant: normal;
+}`
 }

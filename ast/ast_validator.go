@@ -4,26 +4,31 @@ import (
 	"fmt"
 )
 
-type AllowedChild map[ElType]map[ElType]struct{}
+type childType map[ElType]struct{}
+
+func (ct childType) merge(t ...ElType) childType {
+	newChildTypes := childType{}
+	for types := range ct {
+		newChildTypes[types] = struct{}{}
+	}
+	for _, types := range t {
+		newChildTypes[types] = struct{}{}
+	}
+	return newChildTypes
+}
+
+type AllowedChild map[ElType]childType
+
 type MaxChildrenLenByType map[ElType]int
 
 var (
-	errInvalidRootType    = fmt.Errorf("root should be of type layout")
-	errInvalideTypeFound  = fmt.Errorf("element with an invalid type found")
-	errInvalidChildType   = fmt.Errorf("invalid child found")
-	errInvalidChildrenLen = fmt.Errorf("invalid children len")
+	errInvalidRootType               = fmt.Errorf("root should be of type layout")
+	errInvalideTypeFound             = fmt.Errorf("element with an invalid type found")
+	errInvalidChildType              = fmt.Errorf("invalid child found")
+	errInvalidChildrenLen            = fmt.Errorf("invalid children len")
+	errInvalidChildrenDuplicatedType = fmt.Errorf("can have only one element of each type")
 
-	basicEl = map[ElType]struct{}{
-		TypeElEl:     {},
-		TypeElRow:    {},
-		TypeElColumn: {},
-		TypeElImage:  {},
-		TypeElButton: {},
-		TypeElForm:   {},
-		TypeElInput:  {},
-	}
-	basicElPlusText = map[ElType]struct{}{
-		TypeElText:   {},
+	basicEl = childType{
 		TypeElEl:     {},
 		TypeElRow:    {},
 		TypeElColumn: {},
@@ -33,8 +38,8 @@ var (
 		TypeElInput:  {},
 	}
 	allowedChild = AllowedChild{
-		TypeElLayout: basicElPlusText,
-		TypeElEl:     basicElPlusText,
+		TypeElLayout: basicEl.merge(TypeElText, TypeElDefinition),
+		TypeElEl:     basicEl.merge(TypeElText),
 		TypeElRow:    basicEl,
 		TypeElColumn: basicEl,
 		TypeElImage:  {},
@@ -54,11 +59,16 @@ var (
 		TypeElPlaceholder: {
 			TypeElText: {},
 		},
+		TypeElDefinition: {
+			TypeElFont: {},
+		},
+		TypeElFont: {},
 	}
 	maxChildrenLenByType = MaxChildrenLenByType{
-		TypeElLayout:      1,
+		TypeElLayout:      2,
 		TypeElText:        0,
 		TypeElImage:       0,
+		TypeElFont:        0,
 		TypeElInput:       2,
 		TypeElLabel:       1,
 		TypeElPlaceholder: 1,
@@ -67,6 +77,7 @@ var (
 		TypeElColumn:      -1,
 		TypeElButton:      -1,
 		TypeElForm:        -1,
+		TypeElDefinition:  -1,
 	}
 )
 
@@ -85,6 +96,9 @@ func validateRoot(el El, a AllowedChild, m MaxChildrenLenByType) error {
 		return err
 	}
 	if err := validateChildrenPossibleType(el, a[TypeElLayout]); err != nil {
+		return err
+	}
+	if err := restrictChildToOneOfEachTypes(el); err != nil {
 		return err
 	}
 	return validateNode(el, a, m)
@@ -131,6 +145,18 @@ func validateChildrenPossibleType(el El, types map[ElType]struct{}) error {
 	for _, c := range el.Children {
 		if _, ok := types[c.Type]; !ok {
 			return fmt.Errorf("%w : %s cannot have child of type %s", errInvalidChildType, el.Type, c.Type)
+		}
+	}
+	return nil
+}
+
+func restrictChildToOneOfEachTypes(el El) error {
+	count := map[ElType]int{}
+	for _, c := range el.Children {
+		if _, ok := count[c.Type]; !ok {
+			count[c.Type] = 1
+		} else {
+			return fmt.Errorf("%w : found at least two of %s", errInvalidChildrenDuplicatedType, c.Type)
 		}
 	}
 	return nil

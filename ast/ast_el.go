@@ -21,6 +21,8 @@ const (
 	TypeElInput              = "input"
 	TypeElLabel              = "label"
 	TypeElPlaceholder        = "placeholder"
+	TypeElFont               = "font"
+	TypeElDefinition         = "definition"
 )
 
 var ValidElType = map[ElType]struct{}{
@@ -35,6 +37,8 @@ var ValidElType = map[ElType]struct{}{
 	TypeElInput:       {},
 	TypeElLabel:       {},
 	TypeElPlaceholder: {},
+	TypeElFont:        {},
+	TypeElDefinition:  {},
 }
 
 type El struct {
