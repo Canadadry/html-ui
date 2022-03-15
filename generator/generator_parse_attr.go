@@ -42,6 +42,8 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) (s
 			class = fmt.Sprintf("bc-%d-%d-%d-255", attr.Color.R, attr.Color.G, attr.Color.B)
 		case ast.TypeAttrFontFamily:
 			class = fmt.Sprintf("ff-%ssans-serif", strings.ToLower(attr.Value))
+		case ast.TypeAttrFontWeigth:
+			class = "w" + attr.Value
 		case ast.TypeAttrWidth:
 			hasWidthAttr = true
 			switch attr.Size.Type() {

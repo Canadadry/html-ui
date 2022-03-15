@@ -32,6 +32,7 @@ func validateAttribute(el El) error {
 			TypeAttrBorderColor:   {},
 			TypeAttrBorderWidth:   {},
 			TypeAttrFontFamily:    {},
+			TypeAttrFontWeigth:    {},
 		},
 		TypeElRow: map[AttrType]struct{}{
 			TypeAttrWidth:         {},
@@ -46,6 +47,7 @@ func validateAttribute(el El) error {
 			TypeAttrBorderColor:   {},
 			TypeAttrBorderWidth:   {},
 			TypeAttrFontFamily:    {},
+			TypeAttrFontWeigth:    {},
 		},
 		TypeElText: map[AttrType]struct{}{},
 		TypeElButton: map[AttrType]struct{}{
@@ -64,6 +66,7 @@ func validateAttribute(el El) error {
 			TypeAttrName:          {},
 			TypeAttrValue:         {},
 			TypeAttrFontFamily:    {},
+			TypeAttrFontWeigth:    {},
 		},
 		TypeElEl: map[AttrType]struct{}{
 			TypeAttrWidth:         {},
@@ -78,6 +81,7 @@ func validateAttribute(el El) error {
 			TypeAttrBorderColor:   {},
 			TypeAttrBorderWidth:   {},
 			TypeAttrFontFamily:    {},
+			TypeAttrFontWeigth:    {},
 		},
 		TypeElForm: map[AttrType]struct{}{
 			TypeAttrMethod: {},
