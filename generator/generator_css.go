@@ -120,6 +120,8 @@ func generateHead(cssClasses UniqueClasses, fonts fontDefiniton) ([]html.Tag, er
 }.ui-slide-bar:focus + .s .focusable-thumb.%s {
   background-color: rgba(%d,%d,%d,1);
 }`, class, r, g, b, class, r, g, b, class, r, g, b, class, r, g, b)
+		case strings.HasPrefix(class, "w"):
+			continue
 		default:
 			return nil, fmt.Errorf("cannot generate css class for  %s", class)
 		}
