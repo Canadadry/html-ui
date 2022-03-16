@@ -3,14 +3,14 @@
 		<font name="Poppins" src="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&amp;display=swap"/>
 	</definition>
 	<column width="fill" height="fill" bg-color="#f6f6f6" spacing="100" font-family="Poppins">
-		<el width="fill" height="px:68" align="top" bg-color="#0ab09a">
+		<el width="fill" height="px:68" align="top" bg-color="#0ab09a" shadow="oy:2;b:2;color:rgb(204,204,204)">
 			<el align="centerX,centerY">
 				<img height="px:48" src="public/logo.png" alt="logo"></img>
 			</el>
 		</el>
 		<column  align="centerX">
 			<form>
-				<column padding="20" bg-color="white" border-width="1" border-color="#dee2e6" border-rounded="10" spacing="10">
+				<column padding="20" bg-color="white" border-width="1" border-color="#dee2e6" border-rounded="10" spacing="10" shadow="oy:2;b:2;color:rgb(204,204,204)">
 					<row>
 						<el width="px:40"></el>
 						<column spacing="20">
@@ -26,7 +26,7 @@
 							</input>
 							<row spacing="50">
 								<el align="left,centerY" font-color="#909090" font-size="13" font-weight="3">Mot de passe oublié?</el>
-								<button align="right" bg-color="#0ab09a" border-rounded="30" padding="15">
+								<button align="right" bg-color="#0ab09a" border-rounded="30" padding="15" shadow="oy:2;b:2;color:rgb(204,204,204)">
 									<row>
 										<el width="px:50"></el>
 										<el font-color="white" font-size="15" font-weight="7">Se connecter</el>
