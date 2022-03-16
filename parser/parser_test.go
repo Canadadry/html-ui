@@ -33,6 +33,9 @@ func TestParser(t *testing.T) {
 			hello world!
 		</el>
 	</column>
+</layout>`, `<layout>
+	<font name="Poppins" src="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&amp;display=swap">
+	</font>
 </layout>`,
 	}
 

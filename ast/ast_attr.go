@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image/color"
 	"io"
+	"strings"
 )
 
 type AttrType string
@@ -114,6 +115,6 @@ func (att *Attribute) Parse() error {
 }
 
 func (att Attribute) Xml(w io.Writer) error {
-	_, err := fmt.Fprintf(w, " %v=\"%s\"", att.Type, att.Value)
+	_, err := fmt.Fprintf(w, " %v=\"%s\"", att.Type, strings.ReplaceAll(att.Value, "&", "&amp;"))
 	return err
 }
