@@ -30,6 +30,13 @@ func generateHead(cssClasses UniqueClasses, fonts fontDefiniton) ([]html.Tag, er
 			continue
 		case strings.HasPrefix(class, "ff-"):
 			continue
+		case strings.HasPrefix(class, "box-"):
+			part := strings.Split(class, "-")
+			if len(part) != 8 {
+				return nil, fmt.Errorf("invalid shadow css class")
+			}
+			style += generateShadow(class, part[1], part[2], part[3], part[4], part[5], part[6], part[7])
+			continue
 		case strings.HasPrefix(class, "spacing-"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
@@ -275,4 +282,10 @@ func generateFontDefinition(name, url string) string {
 	style = strings.ReplaceAll(style, "%lowerName%", strings.ToLower(name))
 	style = strings.ReplaceAll(style, "%url%", url)
 	return style
+}
+
+func generateShadow(class, ox, oy, blur, size, r, g, b string) string {
+	return fmt.Sprintf(`.%s{
+  box-shadow: %spx %spx %spx %spx rgba(%s,%s,%s,1);
+}`, class, ox, oy, blur, size, r, g, b)
 }

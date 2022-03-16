@@ -1,6 +1,6 @@
 module Main exposing (..)
 
-import Element exposing (Attribute, Element, alignRight, centerY, el, fill, padding, rgb255, row, spacing, text, width)
+import Element exposing (Attribute, Element, alignLeft, alignRight, centerY, el, fill, padding, rgb255, row, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
@@ -13,10 +13,10 @@ main =
 
 myRowOfStuff : Element msg
 myRowOfStuff =
-    row [ width fill, centerY, spacing 30 ]
+    row [ width fill, alignLeft, centerY, spacing 30 ]
         [ myElement []
         , myElement [ shadow ]
-        , el [ alignRight ] (myElement [])
+        , myElement []
         ]
 
 

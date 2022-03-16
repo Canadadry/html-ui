@@ -93,6 +93,16 @@ func (g *generator) parseAttribute(attrs []ast.Attribute, base UniqueClasses) (s
 				base.Add("ah")
 				base.Add("cy")
 			}
+		case ast.TypeAttrShadow:
+			class = fmt.Sprintf("box-%d-%d-%d-%d-%d-%d-%d",
+				attr.Shadow.OffsetX,
+				attr.Shadow.OffsetY,
+				attr.Shadow.Blur,
+				attr.Shadow.Size,
+				attr.Shadow.Color.R,
+				attr.Shadow.Color.G,
+				attr.Shadow.Color.B)
+
 		default:
 			return "", fmt.Errorf("cannot generate class for attribute '%s'", attr.Type)
 		}

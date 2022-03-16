@@ -32,6 +32,7 @@ const (
 	TypeAttrPosition               = "position"
 	TypeAttrFontFamily             = "font-family"
 	TypeAttrFontWeigth             = "font-weight"
+	TypeAttrShadow                 = "shadow"
 )
 
 var ValidAttrType = map[AttrType]struct{}{
@@ -57,6 +58,7 @@ var ValidAttrType = map[AttrType]struct{}{
 	TypeAttrPosition:      {},
 	TypeAttrFontFamily:    {},
 	TypeAttrFontWeigth:    {},
+	TypeAttrShadow:        {},
 }
 
 type Attribute struct {
@@ -67,6 +69,7 @@ type Attribute struct {
 	Size   AttrSize
 	AlignX AlignXType
 	AlignY AlignYType
+	Shadow Shadow
 }
 
 func (att *Attribute) Parse() error {
@@ -108,6 +111,8 @@ func (att *Attribute) Parse() error {
 	case TypeAttrFontFamily:
 	case TypeAttrFontWeigth:
 		err = ParseListAttr(att.Value, []string{"1", "2", "3", "4", "5", "6", "7", "8", "9"})
+	case TypeAttrShadow:
+		att.Shadow, err = ParseShadowAttr(att.Value)
 	default:
 		err = fmt.Errorf("cannot parse unknown attr type %s", att.Type)
 	}

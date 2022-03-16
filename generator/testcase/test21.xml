@@ -6,10 +6,8 @@
 		<el bg-color="rgb(240,0,245)" font-color="white" border-rounded="30" padding="30" shadow="ox:0;oy:2;s:1;b:5;color:rgb(128,128,128)">
 			stylish!
 		</el>
-		<el align="right">
-			<el bg-color="rgb(240,0,245)" font-color="white" border-rounded="30" padding="30">
-				stylish!
-			</el>
+		<el bg-color="rgb(240,0,245)" font-color="white" border-rounded="30" padding="30">
+			stylish!
 		</el>
 	</row>
 </layout>
