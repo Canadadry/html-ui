@@ -86,6 +86,17 @@ func TestAttributesParse(t *testing.T) {
 			in:  Attribute{Type: TypeAttrAlt, Value: "test"},
 			out: Attribute{Type: TypeAttrAlt, Value: "test"},
 		},
+		{
+			in: Attribute{Type: TypeAttrShadow, Value: "ox:1;oy:2;b:3;s:4;color:rgb(1,2,3)"},
+			out: Attribute{Type: TypeAttrShadow, Value: "ox:1;oy:2;b:3;s:4;color:rgb(1,2,3)", Shadow: Shadow{
+				OffsetX: 1,
+				OffsetY: 2,
+				Blur:    3,
+				Size:    4,
+				Color:   color.RGBA{1, 2, 3, 0},
+			},
+			},
+		},
 	}
 
 	for i, tt := range tests {

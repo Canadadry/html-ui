@@ -75,7 +75,7 @@ func TestValidateAttributeError(t *testing.T) {
 				[]AttrType{},
 				buildElWidthAttr(TypeElColumn, []AttrType{"fake"}),
 			),
-			exp: "column cannot have attribute 'fake' possibilities are [align bg-color border-color border-rounded border-width font-color font-family font-size font-weight height padding spacing width]",
+			exp: "column cannot have attribute 'fake' possibilities are [align bg-color border-color border-rounded border-width font-color font-family font-size font-weight height padding shadow spacing width]",
 		},
 		2: {
 			in: buildElWidthAttr(
@@ -83,7 +83,7 @@ func TestValidateAttributeError(t *testing.T) {
 				[]AttrType{},
 				buildElWidthAttr(TypeElRow, []AttrType{"fake"}),
 			),
-			exp: "row cannot have attribute 'fake' possibilities are [align bg-color border-color border-rounded border-width font-color font-family font-size font-weight height padding spacing width]",
+			exp: "row cannot have attribute 'fake' possibilities are [align bg-color border-color border-rounded border-width font-color font-family font-size font-weight height padding shadow spacing width]",
 		},
 		3: {
 			in: buildElWidthAttr(
@@ -91,7 +91,7 @@ func TestValidateAttributeError(t *testing.T) {
 				[]AttrType{},
 				buildElWidthAttr(TypeElEl, []AttrType{"fake"}),
 			),
-			exp: "el cannot have attribute 'fake' possibilities are [align bg-color border-color border-rounded border-width font-color font-family font-size font-weight height padding spacing width]",
+			exp: "el cannot have attribute 'fake' possibilities are [align bg-color border-color border-rounded border-width font-color font-family font-size font-weight height padding shadow spacing width]",
 		},
 		4: {
 			in: buildElWidthAttr(

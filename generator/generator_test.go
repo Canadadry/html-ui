@@ -35,6 +35,7 @@ func TestGenerate(t *testing.T) {
 		"test18_part4",
 		"test19",
 		"test20",
+		"test21",
 	}
 
 	for _, tt := range tests {
