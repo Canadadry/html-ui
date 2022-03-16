@@ -32,67 +32,67 @@ func generateHead(cssClasses UniqueClasses, fonts fontDefiniton) ([]html.Tag, er
 			continue
 		case strings.HasPrefix(class, "box-"):
 			part := strings.Split(class, "-")
-			if len(part) != 8 {
-				return nil, fmt.Errorf("invalid shadow css class")
+			if len(part) != 8 && len(part) != 9 {
+				return nil, fmt.Errorf("invalid shadow css class %s with %d part", class, len(part))
 			}
-			style += generateShadow(class, part[1], part[2], part[3], part[4], part[5], part[6], part[7])
+			style += generateShadow(class, part[1], part[2], part[3], part[4], part[5], part[6], part[7], len(part) == 9)
 			continue
 		case strings.HasPrefix(class, "spacing-"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
-				return nil, fmt.Errorf("invalid spacing css class")
+				return nil, fmt.Errorf("invalid spacing css class %s", class)
 			}
 			style += generateSpacing(part[1])
 		case strings.HasPrefix(class, "font-size-"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
-				return nil, fmt.Errorf("invalid font-size css class")
+				return nil, fmt.Errorf("invalid font-size css class %s", class)
 			}
 			style += generateFontSize(part[2])
 		case strings.HasPrefix(class, "p-"):
 			part := strings.Split(class, "-")
 			if len(part) != 2 {
-				return nil, fmt.Errorf("invalid p css class")
+				return nil, fmt.Errorf("invalid p css class %s", class)
 			}
 			style += generatePadding(part[1])
 		case strings.HasPrefix(class, "b-"):
 			part := strings.Split(class, "-")
 			if len(part) != 2 {
-				return nil, fmt.Errorf("invalid b css class")
+				return nil, fmt.Errorf("invalid b css class %s", class)
 			}
 			style += generateBorder(part[1])
 		case strings.HasPrefix(class, "br-"):
 			part := strings.Split(class, "-")
 			if len(part) != 2 {
-				return nil, fmt.Errorf("invalid br css class")
+				return nil, fmt.Errorf("invalid br css class %s", class)
 			}
 			style += generateBorderRounded(part[1])
 		case strings.HasPrefix(class, "width-"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
-				return nil, fmt.Errorf("invalid width css class")
+				return nil, fmt.Errorf("invalid width css class %s", class)
 			}
 			kind := part[1]
 			value, err := strconv.ParseInt(part[2], 10, 64)
 			if err != nil {
-				return nil, fmt.Errorf("invalid width css class : %w", err)
+				return nil, fmt.Errorf("invalid width css class %s: %w", class, err)
 			}
 			style += generateWidth(kind, value)
 		case strings.HasPrefix(class, "height-"):
 			part := strings.Split(class, "-")
 			if len(part) != 3 {
-				return nil, fmt.Errorf("invalid height css class")
+				return nil, fmt.Errorf("invalid height css class %s", class)
 			}
 			kind := part[1]
 			value, err := strconv.ParseInt(part[2], 10, 64)
 			if err != nil {
-				return nil, fmt.Errorf("invalid height css class : %w", err)
+				return nil, fmt.Errorf("invalid height css class %s: %w", class, err)
 			}
 			style += generateHeight(kind, value)
 		case strings.HasPrefix(class, "bg-") && strings.HasSuffix(class, "-255"):
 			r, g, b, err := parseBgClass(class, 3, 4)
 			if err != nil {
-				return nil, fmt.Errorf("invalid bg css class : %w", err)
+				return nil, fmt.Errorf("invalid bg css class %s : %w", class, err)
 			}
 			style += fmt.Sprintf(`.%s{
   background-color: rgba(%d,%d,%d,1);
@@ -100,7 +100,7 @@ func generateHead(cssClasses UniqueClasses, fonts fontDefiniton) ([]html.Tag, er
 		case strings.HasPrefix(class, "fc-") && strings.HasSuffix(class, "-255"):
 			r, g, b, err := parseBgClass(class, 3, 4)
 			if err != nil {
-				return nil, fmt.Errorf("invalid cf css class : %w", err)
+				return nil, fmt.Errorf("invalid cf css class %s: %w", class, err)
 			}
 			style += fmt.Sprintf(`.%s{
   color: rgba(%d,%d,%d,1);
@@ -108,7 +108,7 @@ func generateHead(cssClasses UniqueClasses, fonts fontDefiniton) ([]html.Tag, er
 		case strings.HasPrefix(class, "bc-") && strings.HasSuffix(class, "-255"):
 			r, g, b, err := parseBgClass(class, 3, 4)
 			if err != nil {
-				return nil, fmt.Errorf("invalid bg css class : %w", err)
+				return nil, fmt.Errorf("invalid bg css class %s: %w", class, err)
 			}
 			style += fmt.Sprintf(`.%s{
   border-color: rgba(%d,%d,%d,1);
@@ -116,7 +116,7 @@ func generateHead(cssClasses UniqueClasses, fonts fontDefiniton) ([]html.Tag, er
 		case strings.HasPrefix(class, "bg-") && strings.HasSuffix(class, "-255-fs"):
 			r, g, b, err := parseBgClass(class, 3, 7)
 			if err != nil {
-				return nil, fmt.Errorf("invalid bg css class : %w", err)
+				return nil, fmt.Errorf("invalid bg css class %s: %w", class, err)
 			}
 			style += fmt.Sprintf(`.%s:focus {
   background-color: rgba(%d,%d,%d,1);
@@ -284,8 +284,14 @@ func generateFontDefinition(name, url string) string {
 	return style
 }
 
-func generateShadow(class, ox, oy, blur, size, r, g, b string) string {
-	return fmt.Sprintf(`.%s{
-  box-shadow: %spx %spx %spx %spx rgba(%s,%s,%s,1);
-}`, class, ox, oy, blur, size, r, g, b)
+func generateShadow(class, ox, oy, blur, size, r, g, b string, inner bool) string {
+	styleLeft := `.%s{
+  box-shadow: `
+	styleRight := `%spx %spx %spx %spx rgba(%s,%s,%s,1);
+}`
+	style := styleLeft + styleRight
+	if inner {
+		style = styleLeft + "inset " + styleRight
+	}
+	return fmt.Sprintf(style, class, ox, oy, blur, size, r, g, b)
 }

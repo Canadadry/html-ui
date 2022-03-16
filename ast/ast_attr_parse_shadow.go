@@ -12,6 +12,7 @@ type Shadow struct {
 	Blur    int
 	Size    int
 	Color   color.RGBA
+	Inner   bool
 }
 
 func ParseShadowAttr(v string) (Shadow, error) {
@@ -20,6 +21,8 @@ func ParseShadowAttr(v string) (Shadow, error) {
 	for _, p := range params {
 		var err error
 		switch true {
+		case strings.HasPrefix(p, "inner"):
+			s.Inner = true
 		case strings.HasPrefix(p, "ox:"):
 			s.OffsetX, err = ParseNumberAttr(p[3:])
 		case strings.HasPrefix(p, "oy:"):
